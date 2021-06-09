@@ -62,6 +62,7 @@ class JobView(ViewSet):
             # Only the creator can alter the job
             if job.created_by != user:
                 raise ValidationError("You can only edit jobs you created.")
+
             req = request.data
             job_type = JobType.objects.get(pk=req['type'])
             job.title = req['title']
@@ -75,4 +76,24 @@ class JobView(ViewSet):
             return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
 
         except ValidationError as ex:
-            return Response({"reason": ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"reason": ex.args[0]}, status=status.HTTP_401_UNAUTHORIZED)
+
+    def destroy(self, request, pk=None):
+        user = request.auth.user
+
+        try:
+            job = Job.objects.get(pk=pk)
+
+            # Only the creator can delete the job
+            if job.created_by != user:
+                raise ValidationError("You can only delete jobs you created.")
+            job.delete()
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
+        
+        except Job.DoesNotExist as ex:
+            return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
+
+        except ValidationError as ex:
+            return Response({"reason": ex.args[0]}, status=status.HTTP_401_UNAUTHORIZED)
+
+            
