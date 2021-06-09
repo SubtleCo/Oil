@@ -1,0 +1,9 @@
+[
+    {
+        "model": "oilapi.jobtype",
+        "pk": 1,
+        "fields": {
+            "title": "Yardwork"
+        }
+    }
+]

@@ -1,0 +1,10 @@
+[
+    {
+        "model": "oilapi.job_users",
+        "pk": 1,
+        "fields": {
+            "user_id": 1,
+            "job_id": 1
+        }
+    }
+]

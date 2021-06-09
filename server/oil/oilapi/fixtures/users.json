@@ -1,0 +1,20 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$150000$fHDURJBIASpx$trZS1MWc6YiNe5EYNBap+P+zMAwpNgNbUZH/b9bgvdw=",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "amart",
+            "first_name": "Alex",
+            "last_name": "Martin",
+            "email": "alex@alex.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2019-10-10T19:12:13.676Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]

@@ -9,4 +9,4 @@ class Job(models.Model):
     created_at = models.DateField(auto_now=False, auto_now_add=True)
     last_completed = models.DateField(auto_now=False, auto_now_add=False)
     last_completed_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="last_job_completer")
-    users = models.ManyToManyField(User, related_name="jobs")
+    users = models.ManyToManyField(User, related_name="job")

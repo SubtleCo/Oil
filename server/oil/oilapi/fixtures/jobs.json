@@ -1,0 +1,15 @@
+[
+    {
+        "model": "oilapi.job",
+        "pk": 1,
+        "fields": {
+            "title": "Mow the lawn",
+            "type_id": 1,
+            "created_by_id": 1,
+            "frequency": 7,
+            "created_at": "2021-06-09",
+            "last_completed": "2021-06-09",
+            "last_completed_by_id": 1
+        }
+    }
+]
