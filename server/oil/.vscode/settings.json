@@ -1,0 +1,11 @@
+{
+    "python.pythonPath": "/Users/alexmartin/.local/share/virtualenvs/server-5CqkKvgF/bin/python",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "oil_db",
+            "database": "db.sqlite3"
+        }
+    ]
+}
