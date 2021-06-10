@@ -31,6 +31,10 @@ class UserPairView(ViewSet):
         user = request.auth.user
         user_2 = User.objects.get(pk=pk)
 
+        # Make sure the user isn't trying to befriend themselves
+        if user == user_2:
+            return Response('No, you cannot befriend yourself.', status=status.HTTP_400_BAD_REQUEST)
+
         # Make sure this relationship does not already exist
 
         try:
