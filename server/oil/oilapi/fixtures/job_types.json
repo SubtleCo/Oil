@@ -3,7 +3,8 @@
         "model": "oilapi.jobtype",
         "pk": 1,
         "fields": {
-            "title": "Yardwork"
+            "title": "Yardwork",
+            "created_by_id": 1
         }
     }
 ]
