@@ -5,3 +5,5 @@ class JobInvite(models.Model):
     job = models.ForeignKey("Job", on_delete=models.CASCADE)
     inviter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="job_inviter")
     invitee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="job_invitee")
+    accepted = models.BooleanField(default=False)
+    accepted_at = models.DateTimeField(null=True)
