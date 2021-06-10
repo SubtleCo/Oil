@@ -16,13 +16,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from oilapi.views import JobView, JobTypeView
+from oilapi.views import JobView, JobTypeView, UserPairView
 from rest_framework import routers
 from django.conf.urls import include
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'jobs', JobView, 'job')
 router.register(r'jobtypes', JobTypeView, 'job_type')
+router.register(r'friends', UserPairView, 'user_pair')
 
 urlpatterns = [
     path('', include(router.urls)),
