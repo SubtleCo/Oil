@@ -31,7 +31,7 @@ class UserPairView(ViewSet):
         user = request.auth.user
         user_2 = User.objects.get(pk=pk)
 
-        # Make sure the user isn't trying to befriend themselves
+        # Make sure the user isn't trying to befriend themself
         if user == user_2:
             return Response('No, you cannot befriend yourself.', status=status.HTTP_400_BAD_REQUEST)
 
@@ -86,21 +86,23 @@ class UserPairView(ViewSet):
     # Accept an invite from another user if user == user_2 in the UserPair
     @action(methods=['put'], detail=True)
     def accept(self, request, pk=None):
-        user = request.auth.user
+        if request.method == "PUT":
+            user = request.auth.user
 
-        try:
-            user_pair = UserPair.objects.get(pk=pk)
-            if user_pair.user_2 != user:
-                return Response('Only the invited user can accept the invitation', status=status.HTTP_401_UNAUTHORIZED)
-            user_pair.accepted = True
-            user_pair.accepted_at = datetime.now()
-            user_pair.save()
-            return Response(None, status=status.HTTP_204_NO_CONTENT)
+            try:
+                user_pair = UserPair.objects.get(pk=pk)
+                if user_pair.user_2 != user:
+                    return Response('Only the invited user can accept the invitation', status=status.HTTP_401_UNAUTHORIZED)
+                user_pair.accepted = True
+                user_pair.accepted_at = datetime.now()
+                user_pair.save()
+                return Response(None, status=status.HTTP_204_NO_CONTENT)
 
-        except UserPair.DoesNotExist as ex:
-            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+            except UserPair.DoesNotExist as ex:
+                return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
-        except Exception as ex:
-            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+            except Exception as ex:
+                return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)
             

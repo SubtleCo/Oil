@@ -4,8 +4,9 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.decorators import action
-from oilapi.models import Job, JobType
+from oilapi.models import Job, JobType, JobInvite
 from datetime import date
+from django.db.models import Q
 
 class JobSerializer(serializers.ModelSerializer):
     """JSON serializer for Jobs"""
@@ -96,4 +97,42 @@ class JobView(ViewSet):
         except ValidationError as ex:
             return Response({"reason": ex.args[0]}, status=status.HTTP_401_UNAUTHORIZED)
 
-            
+################################  Job Sharing Logic  ################################
+
+    # Sending a POST request to /jobs/pk/share will invite a user to a job
+    # Sending a DELETE request to /jobs/pk/share will delete an existing invitation
+    @action(methods=['post','delete'], detail=True)
+    def share(self, request, pk=None):
+        req = request.data
+        user = request.auth.user
+        user_2 = req['user_2']
+
+        try:
+            job = Job.objects.get(pk=pk)
+        except Job.DoesNotExist as ex:
+            return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
+
+        if request.method == 'POST':
+            # Make sure the invitation doesn't re-invite the same user to the same job
+            try:
+                duplicate = JobInvite.objects.get(
+                    Q(job=job),
+                    Q(inviter=user),
+                    Q(invitee=user_2)
+                )
+                return Response('You have already shared this job to this user!', 
+                    status=status.HTTP_400_BAD_REQUEST)
+            except:
+                pass
+
+            # Create the invitation
+            job_invite = JobInvite()
+            job_invite.inviter = user
+            job_invite.invitee = user_2
+            job_invite.job = job
+
+            #####################################################
+            #####################################################
+            #####################################################
+            # save the job invitation and send it back
+
