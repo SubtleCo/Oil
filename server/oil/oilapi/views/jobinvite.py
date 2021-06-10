@@ -5,10 +5,34 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.decorators import action
-from oilapi.models import Job, JobType, JobInvite, UserPair
-from datetime import date
+from oilapi.models import Job, JobInvite
+from datetime import datetime
 from django.db.models import Q
 from django.contrib.auth.models import User
+
+class ShortJobSerializer(serializers.ModelSerializer):
+    """JSON serializer for Jobs, abbreviated"""
+    class Meta:
+        model = Job
+        fields = ['id', 'title']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """JSON serializer for user, names only"""
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name']
+
+
+class JobInviteSerializer(serializers.ModelSerializer):
+    """JSON serializer for JobInvites"""
+    job = ShortJobSerializer(many=False)
+    inviter = UserSerializer(many=False)
+    invitee = UserSerializer(many=False)
+
+    class Meta:
+        model = JobInvite
+        fields = ['id', 'job', 'inviter', 'invitee', 'accepted']
 
 # accessed with url '/shared/pk'
 class JobInviteView(ViewSet):
@@ -29,6 +53,35 @@ class JobInviteView(ViewSet):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
     def list(self, request):
-        return Response('hi there!')
+        user = request.auth.user
+
+        # get all invitations sent or recieved by the user
+        job_invites = JobInvite.objects.filter(
+            Q(inviter=user) | Q(invitee=user)
+        )
+        serializer = JobInviteSerializer(job_invites, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    # The invitee accepts the job invitation
+    def update(self, request, pk=None):
+        user = request.auth.user
+
+        try:
+            job_invite = JobInvite.objects.get(
+                Q(pk=pk),
+                Q(invitee=user),
+                Q(accepted=False)
+            )
+            job_invite.accepted = True
+            job_invite.accepted_at = datetime.now()
+            job_invite.save()
+
+            job = job_invite.job
+            job.users.add(user)
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
+        except JobInvite.DoesNotExist as ex:
+            return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
+
         
-        
+
+
