@@ -4,15 +4,43 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.decorators import action
-from oilapi.models import Job, JobType, JobInvite
+from oilapi.models import Job, JobType, JobInvite, UserPair
 from datetime import date
 from django.db.models import Q
+from django.contrib.auth.models import User
+
 
 class JobSerializer(serializers.ModelSerializer):
     """JSON serializer for Jobs"""
     class Meta:
         model = Job
-        fields = ['id', 'title', 'type', 'frequency', 'created_at', 'last_completed', 'last_completed_by', 'users']
+        fields = ['id', 'title', 'type', 'frequency', 'created_at',
+                  'last_completed', 'last_completed_by', 'users']
+
+
+class ShortJobSerializer(serializers.ModelSerializer):
+    """JSON serializer for Jobs, abbreviated"""
+    class Meta:
+        model = Job
+        fields = ['id', 'title']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """JSON serializer for user, names only"""
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name']
+
+
+class JobInviteSerializer(serializers.ModelSerializer):
+    """JSON serializer for JobInvites"""
+    job = ShortJobSerializer(many=False)
+    inviter = UserSerializer(many=False)
+    invitee = UserSerializer(many=False)
+
+    class Meta:
+        model = JobInvite
+        fields = ['id', 'job', 'inviter', 'invitee', 'accepted']
 
 
 class JobView(ViewSet):
@@ -36,7 +64,6 @@ class JobView(ViewSet):
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
-    
     def retrieve(self, request, pk=None):
         try:
             job = Job.objects.get(pk=pk)
@@ -44,14 +71,14 @@ class JobView(ViewSet):
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
-        
 
     def list(self, request):
         user = request.auth.user
 
         # Only return jobs that the user is a part of
         jobs = Job.objects.filter(users=user)
-        serializer = JobSerializer(jobs, many=True, context={'request': request})
+        serializer = JobSerializer(
+            jobs, many=True, context={'request': request})
         return Response(serializer.data)
 
     def update(self, request, pk=None):
@@ -90,7 +117,7 @@ class JobView(ViewSet):
                 raise ValidationError("You can only delete jobs you created.")
             job.delete()
             return Response(None, status=status.HTTP_204_NO_CONTENT)
-        
+
         except Job.DoesNotExist as ex:
             return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
 
@@ -99,29 +126,38 @@ class JobView(ViewSet):
 
 ################################  Job Sharing Logic  ################################
 
-    # Sending a POST request to /jobs/pk/share will invite a user to a job
-    # Sending a DELETE request to /jobs/pk/share will delete an existing invitation
-    @action(methods=['post','delete'], detail=True)
+    @action(methods=['post', 'delete'], detail=True)
     def share(self, request, pk=None):
         req = request.data
         user = request.auth.user
-        user_2 = req['user_2']
+        user_2 = User.objects.get(pk=int(req['invitee']))
 
+        # Make sure the job exists
         try:
             job = Job.objects.get(pk=pk)
         except Job.DoesNotExist as ex:
             return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
 
+        # Make sure users are friends
+        try:
+            friends = UserPair.objects.get(
+                Q(user_1=user),
+                Q(user_2=user_2),
+                Q(accepted=True)
+            )
+        except UserPair.DoesNotExist:
+            return Response('You are not friends with this user', status=status.HTTP_401_UNAUTHORIZED)
+
+    # Sending a POST request to /jobs/pk/share will invite a user to a job
         if request.method == 'POST':
-            # Make sure the invitation doesn't re-invite the same user to the same job
+            # Make sure the invitation doesn't invite a user to a job they already share
             try:
                 duplicate = JobInvite.objects.get(
                     Q(job=job),
-                    Q(inviter=user),
                     Q(invitee=user_2)
                 )
-                return Response('You have already shared this job to this user!', 
-                    status=status.HTTP_400_BAD_REQUEST)
+                return Response('You have already shared this job to this user!',
+                                status=status.HTTP_400_BAD_REQUEST)
             except:
                 pass
 
@@ -131,8 +167,10 @@ class JobView(ViewSet):
             job_invite.invitee = user_2
             job_invite.job = job
 
-            #####################################################
-            #####################################################
-            #####################################################
-            # save the job invitation and send it back
-
+            try:
+                job_invite.save()
+                serializer = JobInviteSerializer(
+                    job_invite, context={'request': request})
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except ValidationError as ex:
+                return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
