@@ -13,12 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
+from rest_framework.authtoken.views import obtain_auth_token
 from django.contrib import admin
 from django.urls import path
-from oilapi.views import JobView, JobTypeView, UserPairView, JobInviteView
 from rest_framework import routers
-from django.conf.urls import include
+from django.conf.urls import include, url
+from oilapi.views import (  JobView,
+                            JobTypeView,
+                            UserPairView,
+                            JobInviteView,
+                            login_user,
+                            register_user
+                            )   
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'jobs', JobView, 'job')
@@ -29,4 +35,8 @@ router.register(r'shared', JobInviteView, 'job_invite')
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
+    url(r'^login$', login_user),
+    url(r'^register$', register_user),
+    url(r'^api-token-auth$', obtain_auth_token),
+    url(r'^api-auth', include('rest_framework.urls', namespace='rest_framework')),
 ]
