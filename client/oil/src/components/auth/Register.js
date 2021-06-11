@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { authApi, userStorageKey } from "./authSettings"
+import { authApi, userIdStorageKey, userTokenStorageKey } from "./authSettings"
 import "./Login.css"
-import { getCurrentUser } from "./UserProvider"
 
 export const Register = () => {
 
@@ -17,7 +16,7 @@ export const Register = () => {
     })
     const [passwordConfirm, setPasswordConfirm] = useState("")
     const [conflictDialog, setConflictDialog] = useState(false)
-    const loggedInUserId = parseInt(sessionStorage.getItem(userStorageKey))
+    const loggedInUserId = parseInt(sessionStorage.getItem(userIdStorageKey))
     let text = {}
 
     const history = useHistory()
@@ -97,8 +96,8 @@ export const Register = () => {
                             .then(res => res.json())
                             .then(createdUser => {
                                 if (createdUser.hasOwnProperty("id")) {
-                                    sessionStorage.setItem(userStorageKey, createdUser.id)
-                                    getCurrentUser()
+                                    sessionStorage.setItem(userIdStorageKey, createdUser.id)
+                                    sessionStorage.setItem(userTokenStorageKey, createdUser.token)
                                     history.push("/")
                                 }
                             })

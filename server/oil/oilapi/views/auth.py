@@ -12,8 +12,7 @@ from rest_framework.authtoken.models import Token
 @csrf_exempt
 def login_user(request):
     """ User login authentication """
-    body = request.body.decode('utf-8')
-    req_body = json.loads(body)
+    req_body = json.loads(request.body.decode())
 
     if request.method == "POST":
         username = req_body['username']

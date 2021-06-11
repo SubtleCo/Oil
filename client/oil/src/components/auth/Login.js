@@ -2,18 +2,17 @@
 
 import React, { useState } from "react"
 import { Link, useHistory } from "react-router-dom";
-import { authApi, userStorageKey } from "./authSettings"
-import { getCurrentUser } from './UserProvider'
+import { authApi, userIdStorageKey, userTokenStorageKey } from "./authSettings"
 import "./Login.css"
 
 
 
 export const Login = () => {
-    const [loginUser, setLoginUser] = useState({ email: "", password: ""})
-    const [existDialog, setExistDialog] = useState(false)
+    const [loginUser, setLoginUser] = useState({ username: "", password: "" })
+    const [BadLoginDialog, setBadLoginDialog] = useState(false)
 
     const history = useHistory()
-    
+
     // Keep track of user input
     const handleInputChange = (event) => {
         const newUser = { ...loginUser }
@@ -21,51 +20,47 @@ export const Login = () => {
         setLoginUser(newUser)
     }
 
-    // Check if a user exitsts in the DB
-    const existingUserCheck = () => {
-        return fetch(`${authApi.localApiBaseUrl}/${authApi.endpoint}?email=${loginUser.email}`)
-            .then(res => res.json())
-            .then(user => user.length ? user[0] : false)
-    }
-
     const handleLogin = (e) => {
         e.preventDefault()
-
-        existingUserCheck()
-            .then(exists => {
-                if (exists) {
-                    // check to see if passwords match
-                    if (exists.password === loginUser.password) {
-                        sessionStorage.setItem(userStorageKey, exists.id)
-                        getCurrentUser()
-                        history.push("/")
-                    } else {
-                        window.alert(`You're a user, but that ain't your password. Is this really ${exists.firstName}?`)
-                    }
+        return fetch(`${authApi.localApiBaseUrl}/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: loginUser.username,
+                password: loginUser.password
+            })
+        })
+            .then(res => res.json())
+            .then(user => {
+                if (user.valid) {
+                    sessionStorage.setItem(userIdStorageKey, user.id)
+                    sessionStorage.setItem(userTokenStorageKey, user.token)
                 } else {
-                    setExistDialog(true)
+                    setBadLoginDialog(true)
                 }
             })
     }
 
     return (
         <main className="container--login">
-            <dialog className="dialog dialog--auth" open={existDialog}>
-                <div>User does not exist</div>
-                <button className="button--close" onClick={e => setExistDialog(false)}>Close</button>
+            <dialog className="dialog dialog--auth" open={BadLoginDialog}>
+                <div>Your username and password don't match. Are you sure you've registered?</div>
+                <button className="button--close" onClick={e => setBadLoginDialog(false)}>Close</button>
             </dialog>
             <section>
                 <form className="form--login" onSubmit={handleLogin}>
-                    <h1>Tip Hat</h1>
+                    <h1>Welcome to Oil</h1>
                     <h2>Please sign in</h2>
                     <fieldset>
-                        <label htmlFor="inputEmail"> Email address </label>
-                        <input type="email"
-                            id="email"
+                        <label htmlFor="inputusername"> Username </label>
+                        <input type="username"
+                            id="username"
                             className="form-control"
-                            placeholder="Email address"
+                            placeholder="username"
                             required autoFocus
-                            value={loginUser.email}
+                            value={loginUser.username}
                             onChange={handleInputChange} />
                     </fieldset>
                     <fieldset>
@@ -73,7 +68,7 @@ export const Login = () => {
                         <input type="password"
                             id="password"
                             className="form-control"
-                            placeholder="Password"
+                            placeholder="password"
                             required autoFocus
                             value={loginUser.password}
                             onChange={handleInputChange} />
