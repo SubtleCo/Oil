@@ -22,6 +22,7 @@ from oilapi.views import (  JobView,
                             JobTypeView,
                             UserPairView,
                             JobInviteView,
+                            UserView,
                             login_user,
                             register_user
                             )   
@@ -31,6 +32,7 @@ router.register(r'jobs', JobView, 'job')
 router.register(r'jobtypes', JobTypeView, 'job_type')
 router.register(r'friends', UserPairView, 'user_pair')
 router.register(r'shared', JobInviteView, 'job_invite')
+router.register(r'users', UserView, 'user')
 
 urlpatterns = [
     path('', include(router.urls)),
