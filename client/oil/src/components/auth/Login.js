@@ -37,6 +37,7 @@ export const Login = () => {
                 if (user.valid) {
                     sessionStorage.setItem(userIdStorageKey, user.id)
                     sessionStorage.setItem(userTokenStorageKey, user.token)
+                    history.push("/")
                 } else {
                     setBadLoginDialog(true)
                 }
