@@ -22,9 +22,10 @@ from oilapi.views import (  JobView,
                             JobTypeView,
                             UserPairView,
                             JobInviteView,
-                            UserView,
+                            # UserView,
                             login_user,
-                            register_user
+                            register_user,
+                            email_check
                             )   
 
 router = routers.DefaultRouter(trailing_slash=False)
@@ -32,13 +33,13 @@ router.register(r'jobs', JobView, 'job')
 router.register(r'jobtypes', JobTypeView, 'job_type')
 router.register(r'friends', UserPairView, 'user_pair')
 router.register(r'shared', JobInviteView, 'job_invite')
-router.register(r'users', UserView, 'user')
 
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     url(r'^login$', login_user),
     url(r'^register$', register_user),
+    url(r'^email$', email_check),
     url(r'^api-token-auth$', obtain_auth_token),
     url(r'^api-auth', include('rest_framework.urls', namespace='rest_framework')),
 ]

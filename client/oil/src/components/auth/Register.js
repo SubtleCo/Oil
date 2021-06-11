@@ -44,9 +44,9 @@ export const Register = () => {
 
     const existingUserCheck = () => {
 
-        return fetch(`${authApi.localApiBaseUrl}/users/check?email=${registerUser.email}`)
+        return fetch(`${authApi.localApiBaseUrl}/email?email=${registerUser.email}`)
             .then(res => res.json())
-            .then(user => !!user.length)
+            .then(jsonRes => jsonRes.valid)
     }
 
     const editUser = () => {
@@ -57,8 +57,8 @@ export const Register = () => {
             },
             body: JSON.stringify({
                 email: registerUser.email,
-                firstName: registerUser.firstName,
-                lastName: registerUser.lastName,
+                first_name: registerUser.firstName,
+                last_name: registerUser.lastName,
                 password: registerUser.password,
                 username: registerUser.username
             })
@@ -78,8 +78,8 @@ export const Register = () => {
         }
         existingUserCheck()
             // if the new user has a unique email to the API, register a new user
-            .then((userExists) => {
-                if (!userExists) {
+            .then((emailAvailable) => {
+                if (emailAvailable) {
                     if (registerUser.password === passwordConfirm) {
                         fetch(`${authApi.localApiBaseUrl}/register`, {
                             method: "POST",
@@ -88,8 +88,8 @@ export const Register = () => {
                             },
                             body: JSON.stringify({
                                 email: registerUser.email,
-                                firstName: registerUser.firstName,
-                                lastName: registerUser.lastName,
+                                first_name: registerUser.firstName,
+                                last_name: registerUser.lastName,
                                 password: registerUser.password,
                                 username: registerUser.username
                             })

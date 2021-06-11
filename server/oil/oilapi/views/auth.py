@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
+
 @csrf_exempt
 def login_user(request):
     """ User login authentication """
@@ -35,6 +36,7 @@ def login_user(request):
 
     return HttpResponseNotAllowed(permitted_methods=['POST'])
 
+
 @csrf_exempt
 def register_user(request):
     """ User and Token creation for a new user """
@@ -57,4 +59,25 @@ def register_user(request):
     data = json.dumps({"token": token.key, "id": new_user.id})
     return HttpResponse(data, content_type='application/json', status=status.HTTP_201_CREATED)
 
+
+@csrf_exempt
+def email_check(request):
+    """ Check if a user with an email address exists """
+    email = request.GET.get('email', None)
+    try:
+        User.objects.get(email=email)
+        data = json.dumps({
+            "message": "That email already has an account",
+            "valid": False
+        })
+        return HttpResponse(
+            data,
+            content_type='application/json',
+            status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        data = json.dumps({"valid": True})
+        return HttpResponse(
+            data,
+            content_type='application/json',
+            status=status.HTTP_200_OK)
 
