@@ -50,11 +50,12 @@ class JobView(ViewSet):
         req = request.data
         job = Job()
         job_type = JobType.objects.get(pk=req['type'])
-        job.title = req['title']
         job.type = job_type
+        job.title = req['title']
         job.created_by = user
         job.frequency = req['frequency']
         job.last_completed = req['last_completed']
+        job.description = req['description']
 
         try:
             job.save()
