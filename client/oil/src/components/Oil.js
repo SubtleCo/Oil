@@ -4,6 +4,7 @@ import { userTokenStorageKey } from './auth/authSettings'
 import { Login } from './auth/Login'
 import { Register } from './auth/Register'
 import { Footer } from './Footer/Footer'
+import { JobForm } from './Jobs/JobForm'
 
 export const Oil = ({ theme }) => {
     return (
@@ -13,6 +14,7 @@ export const Oil = ({ theme }) => {
                     return (
                         <>
                             <p>You sure are logged in</p>
+                            <JobForm />
                             <Footer theme={theme}/>
                         </>
                     )
