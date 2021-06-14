@@ -8,12 +8,19 @@ import WbSunnyIcon from '@material-ui/icons/WbSunny'
 import WorkIcon from '@material-ui/icons/Work'
 import PeopleIcon from '@material-ui/icons/People'
 import FaceIcon from '@material-ui/icons/Face'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import { Link } from '@material-ui/core'
+import { useHistory } from 'react-router'
+import { userIdStorageKey, userTokenStorageKey } from '../auth/authSettings'
 
 
 
 
 export const Footer = ({ theme }) => {
+    const history = useHistory()
+
+    // Footer Styling
     const useStyles = makeStyles(theme => (
         {
             root: {
@@ -30,35 +37,52 @@ export const Footer = ({ theme }) => {
                 width: '100%',
                 position: 'fixed',
                 bottom: 0,
-              }
+            }
         }
     ))
     const classes = useStyles()
-    const [value, setValue] = useState(0)
 
+    // Handle focus of last tapped menu item
+    const [value, setValue] = useState(0)
     const handleChange = (event, newValue) => {
         setValue(newValue);
-      };
+    };
+
+    // Profile pop up menu logic
+    const [anchorEl, setAnchorEl] = useState(null)
+    const handleProfileMenu = e => {
+        setAnchorEl(e.currentTarget)
+    }
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+
 
     return (
-        // <BottomNavigation
-        //     value={value}
-        //     onChange={(event) => {
-        //         setValue(event.target.newValue);
-        //     }}
-        //     showLabels
-        //     className={classes.root}
-        //     >
-        //     <BottomNavigationAction className={classes.bottomLink} value={0} label="Today" icon={<WbSunnyIcon />} component={Link} href="/" />
-        //     <BottomNavigationAction className={classes.bottomLink} value={1} label="Jobs" icon={<WorkIcon />} component={Link} href="/" />
-        //     <BottomNavigationAction className={classes.bottomLink} value={2} label="People" icon={<PeopleIcon />} component={Link} href="/" />
-        //     <BottomNavigationAction className={classes.bottomLink} value={3} label="Profile" icon={<FaceIcon />} component={Link} href="/" />
-        // </BottomNavigation>
         <BottomNavigation value={value} onChange={handleChange} className={classes.stickToBottom} showLabels>
             <BottomNavigationAction classes={classes} label="Today" value="today" icon={<WbSunnyIcon />} />
             <BottomNavigationAction classes={classes} label="Jobs" value="jobs" icon={<WorkIcon />} />
             <BottomNavigationAction classes={classes} label="People" value="people" icon={<PeopleIcon />} />
-            <BottomNavigationAction classes={classes} label="Profile" value="profile" icon={<FaceIcon />} />
+            <BottomNavigationAction aria-controls="simple-menu" aria-haspopup="true" onClick={handleProfileMenu} classes={classes} label="Profile" value="profile" icon={<FaceIcon />} />
+            <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={() => {
+                    handleClose()
+                    history.push("/profile")
+                }
+                } value="profile">Profile</MenuItem>
+                <MenuItem onClick={() => {
+                    handleClose()
+                    sessionStorage.clear(userIdStorageKey, userTokenStorageKey)
+                    history.push("/")
+                }
+                }>Logout</MenuItem>
+            </Menu>
         </BottomNavigation>
     )
 }
