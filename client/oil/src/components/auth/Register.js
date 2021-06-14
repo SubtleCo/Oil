@@ -28,7 +28,7 @@ export const Register = () => {
                 .then(res => res.json())
                 .then(setRegisterUser)
         }
-    }, [])
+    }, [loggedInUserId])
 
     // Keep track of user input
     const handleInputChange = (event) => {

@@ -3,15 +3,19 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import '@fontsource/roboto';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-import { yellow } from '@material-ui/core/colors';
+import { yellow, grey } from '@material-ui/core/colors';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { Oil } from './components/Oil';
 
 const theme = createMuiTheme({
   palette: {
-    primary: yellow
+    primary: grey,
+    secondary: yellow
+  },
+  overrides: {
   }
+
 })
 
 ReactDOM.render(

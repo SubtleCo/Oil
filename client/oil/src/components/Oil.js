@@ -3,6 +3,7 @@ import { Redirect, Route } from 'react-router'
 import { userTokenStorageKey } from './auth/authSettings'
 import { Login } from './auth/Login'
 import { Register } from './auth/Register'
+import { Footer } from './Footer/Footer'
 
 export const Oil = ({ theme }) => {
     return (
@@ -12,6 +13,7 @@ export const Oil = ({ theme }) => {
                     return (
                         <>
                             <p>You sure are logged in</p>
+                            <Footer theme={theme}/>
                         </>
                     )
                 } else {
