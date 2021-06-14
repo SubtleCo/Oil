@@ -63,7 +63,7 @@ export const Footer = ({ theme }) => {
             <BottomNavigationAction classes={classes} label="Today" value="today" icon={<WbSunnyIcon />} />
             <BottomNavigationAction classes={classes} label="Jobs" value="jobs" icon={<WorkIcon />} />
             <BottomNavigationAction classes={classes} label="People" value="people" icon={<PeopleIcon />} />
-            <BottomNavigationAction aria-controls="simple-menu" aria-haspopup="true" onClick={handleProfileMenu} classes={classes} label="Profile" value="profile" icon={<FaceIcon />} />
+            <BottomNavigationAction aria-controls="simple-menu" aria-haspopup="true" onClick={handleProfileMenu} classes={classes} label="Me" value="profile" icon={<FaceIcon />} />
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
