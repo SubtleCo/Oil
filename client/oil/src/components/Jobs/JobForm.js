@@ -39,7 +39,7 @@ export const JobForm = props => {
     const [formJob, setFormJob] = useState({
         title: "",
         description: "",
-        type: 0,
+        type: 1,
         frequency: 0,
         created_at: new Date().toISOString().split('T')[0],
         last_completed: new Date().toISOString().split('T')[0]
@@ -55,7 +55,10 @@ export const JobForm = props => {
     }
 
     const handleSubmit = e => {
-        createJob(formJob)
+        e.preventDefault()
+        if (e.currentTarget.reportValidity()) {
+            createJob(formJob)
+        }
     }
 
     return (
@@ -69,22 +72,26 @@ export const JobForm = props => {
                         name="title"
                         label="Title"
                         aria-label="Title"
-                        variant="outlined" />
+                        variant="outlined"
+                        required={true} />
                     <TextField onChange={handleFormChange}
                         value={formJob.description}
                         id="description"
                         name="description"
                         label="Description"
                         aria-label="Description"
-                        variant="outlined" />
+                        variant="outlined" 
+                        required />
                     <TextField onChange={handleFormChange}
                         value={formJob.frequency}
                         type="number"
+                        inputProps={{ min: 1}}
                         id="frequency"
                         name="frequency"
                         label="Frequency (Days)"
                         aria-label="Frequency (Days)"
-                        variant="outlined" />
+                        variant="outlined"
+                        required />
                     <TextField
                         id="last_completed"
                         label="Last time you did this"
@@ -101,12 +108,14 @@ export const JobForm = props => {
                     <TextField
                         id="type"
                         select
+                        inputProps={{ min: 1}}
                         name="type"
                         labelId="test"
                         variant="outlined"
                         label="Type"
                         onChange={handleFormChange}
-                        value={formJob.type}>
+                        value={formJob.type}
+                        required>
                         <MenuItem value={1}>Get</MenuItem>
                         <MenuItem value={2}>Job</MenuItem>
                         <MenuItem value={3}>Types</MenuItem>
