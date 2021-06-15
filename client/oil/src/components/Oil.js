@@ -1,5 +1,6 @@
 import React from 'react'
 import { Redirect, Route } from 'react-router'
+import { ApplicationViews } from './ApplicationViews'
 import { userTokenStorageKey } from './auth/authSettings'
 import { Login } from './auth/Login'
 import { Register } from './auth/Register'
@@ -13,8 +14,8 @@ export const Oil = ({ theme }) => {
                 if (sessionStorage.getItem(userTokenStorageKey)) {
                     return (
                         <>
-                            <p>You sure are logged in</p>
-                            <JobForm />
+                            <p style={{backgroundColor: "yellow"}}>Stick a header here</p>
+                            <ApplicationViews/>
                             <Footer theme={theme}/>
                         </>
                     )

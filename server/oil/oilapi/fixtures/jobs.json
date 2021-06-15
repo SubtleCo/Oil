@@ -11,5 +11,31 @@
             "last_completed": "2021-06-09",
             "last_completed_by_id": 1
         }
+    },
+    {
+        "model": "oilapi.job",
+        "pk": 2,
+        "fields": {
+            "title": "Wash the dog",
+            "type_id": 1,
+            "created_by_id": 1,
+            "frequency": 30,
+            "created_at": "2021-06-09",
+            "last_completed": "2021-06-09",
+            "last_completed_by_id": 1
+        }
+    },
+    {
+        "model": "oilapi.job",
+        "pk": 3,
+        "fields": {
+            "title": "Touch the lightswitch",
+            "type_id": 1,
+            "created_by_id": 1,
+            "frequency": 30,
+            "created_at": "2021-06-09",
+            "last_completed": "2021-06-09",
+            "last_completed_by_id": 1
+        }
     }
 ]
