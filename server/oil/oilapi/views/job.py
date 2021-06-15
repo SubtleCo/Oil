@@ -23,6 +23,7 @@ class JobSerializer(serializers.ModelSerializer):
         model = Job
         fields = ['id', 'title', 'description', 'type', 'frequency', 'created_at',
                   'last_completed', 'last_completed_by', 'users']
+        depth = 2
 
 
 class ShortJobSerializer(serializers.ModelSerializer):

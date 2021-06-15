@@ -47,4 +47,10 @@ class JobTypeView(ViewSet):
         except ValidationError as ex:
             return Response({"reason": ex.args[0]}, status=status.HTTP_401_UNAUTHORIZED)
 
+    def list(self, request):
+
+        job_types = JobType.objects.all()
+        serializer = JobTypeSerializer(
+            job_types, many=True, context={'request': request})
+        return Response(serializer.data)
             
