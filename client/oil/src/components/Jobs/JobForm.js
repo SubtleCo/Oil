@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { userIdStorageKey } from '../auth/authSettings'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import { endsWith } from 'lodash'
 import { JobsContext } from './JobsProvider'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 
 const useStyles = makeStyles(theme => ({
@@ -35,7 +35,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const JobForm = props => {
-    const { createJob } = useContext(JobsContext)
+    const { createJob, getJobById, editJob } = useContext(JobsContext)
+    const { jobId } = useParams()
     const classes = useStyles(props.theme);
     const userId = parseInt(sessionStorage.getItem(userIdStorageKey))
     const history = useHistory()
@@ -47,6 +48,13 @@ export const JobForm = props => {
         created_at: new Date().toISOString().split('T')[0],
         last_completed: new Date().toISOString().split('T')[0]
     })
+
+    useEffect(() => {
+        if (jobId) {
+            getJobById(jobId)
+                .then(setFormJob)
+        }
+    }, [jobId])
 
     const handleFormChange = e => {
         e.preventDefault()
@@ -60,7 +68,11 @@ export const JobForm = props => {
     const handleSubmit = e => {
         e.preventDefault()
         if (e.currentTarget.reportValidity()) {
-            createJob(formJob)
+            if (jobId) {
+                editJob(formJob)
+            } else {
+                createJob(formJob)
+            }
             history.push("/jobs")
         }
     }

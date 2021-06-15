@@ -5,9 +5,8 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
-import WorkIcon from '@material-ui/icons/Work'
 import AddIcon from '@material-ui/icons/Add'
-import EditIcon from '@material-ui/icons/Edit'
+import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import { makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router'
 import Fab from '@material-ui/core/Fab'
@@ -60,12 +59,10 @@ export const JobsList = props => {
                             userJobs.map(j => {
                                 return (
                                     <ListItem key={j.id}>
-                                        <ListLink onClick={() => history.push(`/jobs/${j.id}`)}>
-                                            <ListItemText primary={j.title} />
-                                        </ListLink>
+                                        <ListItemText primary={j.title} />
                                         <ListItemIcon>
-                                            <Fab onClick={() => history.push(`/jobs/${j.id}/edit`)} color="secondary" aria-label="edit">
-                                                <EditIcon />
+                                            <Fab onClick={() => history.push(`/jobs/${j.id}`)} color="secondary" aria-label="edit">
+                                                <MenuOpenIcon />
                                             </Fab>
                                         </ListItemIcon>
                                     </ListItem>

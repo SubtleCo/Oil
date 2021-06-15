@@ -9,12 +9,19 @@ from datetime import date
 from django.db.models import Q
 from django.contrib.auth.models import User
 
+class UserSerializer(serializers.ModelSerializer):
+    """JSON serializer for user, names only"""
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name']
 
 class JobSerializer(serializers.ModelSerializer):
     """JSON serializer for Jobs"""
+    users = UserSerializer(many=True)
+    last_completed_by = UserSerializer(many=False)
     class Meta:
         model = Job
-        fields = ['id', 'title', 'type', 'frequency', 'created_at',
+        fields = ['id', 'title', 'description', 'type', 'frequency', 'created_at',
                   'last_completed', 'last_completed_by', 'users']
 
 
@@ -23,14 +30,6 @@ class ShortJobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ['id', 'title']
-
-
-class UserSerializer(serializers.ModelSerializer):
-    """JSON serializer for user, names only"""
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'first_name', 'last_name']
-
 
 class JobInviteSerializer(serializers.ModelSerializer):
     """JSON serializer for JobInvites"""
@@ -56,6 +55,7 @@ class JobView(ViewSet):
         job.frequency = req['frequency']
         job.last_completed = req['last_completed']
         job.description = req['description']
+        job.last_completed_by = user
 
         try:
             job.save()
@@ -97,6 +97,7 @@ class JobView(ViewSet):
             job.title = req['title']
             job.type = job_type
             job.frequency = req['frequency']
+            job.description = req['description']
             job.last_completed = req['last_completed']
             job.save()
             return Response(None, status=status.HTTP_204_NO_CONTENT)

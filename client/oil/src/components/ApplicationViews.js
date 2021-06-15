@@ -1,5 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
+import { JobDetail } from './Jobs/JobDetail'
 import { JobForm } from './Jobs/JobForm'
 import { JobsList } from './Jobs/JobsList'
 import { JobsProvider } from './Jobs/JobsProvider'
@@ -17,6 +18,14 @@ export const ApplicationViews = () => {
                 </Route>
 
                 <Route exact path="/jobs/create">
+                    <JobForm />
+                </Route>
+
+                <Route exact path="/jobs/:jobId(\d+)">
+                    <JobDetail />
+                </Route>
+
+                <Route exact path="/jobs/:jobId(\d+)/edit">
                     <JobForm />
                 </Route>
 
