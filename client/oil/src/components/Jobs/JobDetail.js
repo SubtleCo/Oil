@@ -76,10 +76,18 @@ export const JobDetail = props => {
     const [job, setJob] = useState({})
     const history = useHistory()
     const [modalOpen, setModalOpen] = useState(false)
+    const [lastCompletedDate, setLastCompletedDate] = useState("")
 
     useEffect(() => {
         getJobById(parseInt(jobId))
-            .then(setJob)
+            .then(job => {
+                setJob(job)
+                let dbDate = new Date(job.last_completed)
+                // correct the date, which will be off by one thanks to JS Date
+                dbDate.setDate(dbDate.getDate() + 1)
+                const niceDate = dbDate.toLocaleDateString('en-es')
+                setLastCompletedDate(niceDate)
+            })
     }, [])
 
     const handleModalOpen = () => {
@@ -104,7 +112,7 @@ export const JobDetail = props => {
                 <Typography className={classes.description} component="p" variant="p" align='left'>{job.description}</Typography>
                 <Typography className={classes.details} component="p" variant="p" align='left'>Repeats every {job.frequency} days</Typography>
                 <Typography className={classes.details} component="p" variant="p" align='left'>
-                    Last completed on {new Date(job.last_completed).toLocaleDateString('en-es')} by {job.last_completed_by?.first_name}
+                    Last completed on {lastCompletedDate} by {job.last_completed_by?.first_name}
                 </Typography>
 
                 {/* Only list out the shared user section if more than one user is on jobs.users */}

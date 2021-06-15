@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.decorators import action
 from oilapi.models import Job, JobType, JobInvite, UserPair
-from datetime import date
+from datetime import date, datetime
 from django.db.models import Q
 from django.contrib.auth.models import User
 
@@ -22,9 +22,8 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ['id', 'title', 'description', 'type', 'frequency', 'created_at',
-                  'last_completed', 'last_completed_by', 'users']
+                  'last_completed', 'last_completed_by', 'users', 'days_lapsed']
         depth = 2
-
 
 class ShortJobSerializer(serializers.ModelSerializer):
     """JSON serializer for Jobs, abbreviated"""
@@ -54,7 +53,7 @@ class JobView(ViewSet):
         job.title = req['title']
         job.created_by = user
         job.frequency = req['frequency']
-        job.last_completed = req['last_completed']
+        job.last_completed = datetime.strptime(req['last_completed'], '%Y-%m-%d').date()
         job.description = req['description']
         job.last_completed_by = user
 
