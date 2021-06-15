@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
     },
     fabs: {
         margin: theme.spacing(1),
-        alignSelf: 'flex-end'
+        alignSelf: 'flex-end',
+        background: theme.palette.success.light
     },
     header: {
         display: 'flex',
@@ -48,8 +49,8 @@ export const JobsList = props => {
         <>
             <div className={classes.root}>
                 <section className={classes.header}>
-                    <h2 className="pageHeader">My Jobs</h2>
-                    <Fab className={classes.fabs}>
+                    <h2 className="pageHeader">All My Jobs</h2>
+                    <Fab onClick={() => history.push(`/jobs/create`)} className={classes.fabs}>
                         <AddIcon />
                     </Fab>
                 </section>
@@ -63,8 +64,8 @@ export const JobsList = props => {
                                             <ListItemText primary={j.title} />
                                         </ListLink>
                                         <ListItemIcon>
-                                            <Fab color="secondary" aria-label="edit">
-                                                <EditIcon onClick={() => history.push(`/jobs/${j.id}/edit`)} />
+                                            <Fab onClick={() => history.push(`/jobs/${j.id}/edit`)} color="secondary" aria-label="edit">
+                                                <EditIcon />
                                             </Fab>
                                         </ListItemIcon>
                                     </ListItem>

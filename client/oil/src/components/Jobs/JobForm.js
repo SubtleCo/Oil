@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import { endsWith } from 'lodash'
 import { JobsContext } from './JobsProvider'
+import { useHistory } from 'react-router-dom'
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,6 +38,7 @@ export const JobForm = props => {
     const { createJob } = useContext(JobsContext)
     const classes = useStyles(props.theme);
     const userId = parseInt(sessionStorage.getItem(userIdStorageKey))
+    const history = useHistory()
     const [formJob, setFormJob] = useState({
         title: "",
         description: "",
@@ -59,6 +61,7 @@ export const JobForm = props => {
         e.preventDefault()
         if (e.currentTarget.reportValidity()) {
             createJob(formJob)
+            history.push("/jobs")
         }
     }
 
