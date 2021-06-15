@@ -17,7 +17,10 @@ const useStyles = makeStyles(theme => ({
     outerPaper: {
         width: "90%",
         margin: "auto",
+        marginTop: "20%",
         padding: "0.5em",
+        display: "flex",
+        flexDirection: "column"
     },
     submitButton: {
         alignSelf: "flex-end",
@@ -32,6 +35,9 @@ const useStyles = makeStyles(theme => ({
     details: {
         marginTop: "10px",
         marginBottom: "10px",
+    },
+    detailRight: {
+        alignSelf: "center"
     },
     jobDetailButtons: {
         display: "flex",
@@ -94,10 +100,11 @@ export const JobDetail = props => {
             <Typography component="h2" variant="h2" align='center'>Job Detail</Typography>
             <Paper className={classes.outerPaper} elevation={6}>
                 <Typography component="h4" variant="h4" align='center'>{job.title}</Typography>
+                <Typography className={`${classes.details} ${classes.detailRight}`} component="p" variant="p" align='left'>({job.type?.title})</Typography>
                 <Typography className={classes.description} component="p" variant="p" align='left'>{job.description}</Typography>
-                <Typography className={classes.details} component="p" variant="p" align='left'>Every {job.frequency} days</Typography>
+                <Typography className={classes.details} component="p" variant="p" align='left'>Repeats every {job.frequency} days</Typography>
                 <Typography className={classes.details} component="p" variant="p" align='left'>
-                    Last completed {new Date(job.last_completed).toLocaleDateString('en-es')} by {job.last_completed_by?.first_name}
+                    Last completed on {new Date(job.last_completed).toLocaleDateString('en-es')} by {job.last_completed_by?.first_name}
                 </Typography>
 
                 {/* Only list out the shared user section if more than one user is on jobs.users */}

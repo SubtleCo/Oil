@@ -6,5 +6,21 @@
             "title": "Yardwork",
             "created_by_id": 1
         }
+    },
+    {
+        "model": "oilapi.jobtype",
+        "pk": 2,
+        "fields": {
+            "title": "Maintenance",
+            "created_by_id": 1
+        }
+    },
+    {
+        "model": "oilapi.jobtype",
+        "pk": 3,
+        "fields": {
+            "title": "Nurturing",
+            "created_by_id": 1
+        }
     }
 ]

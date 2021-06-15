@@ -5,6 +5,7 @@ export const JobsContext = createContext()
 
 export const JobsProvider = props => {
     const [userJobs, setUserJobs] = useState([])
+    const [jobTypes, setJobTypes] = useState([])
 
     const getAllUserJobs = () => {
         return fetch(`${apiSettings.baseUrl}/jobs`, {
@@ -46,13 +47,23 @@ export const JobsProvider = props => {
         })
     }
 
+    const getJobTypes = () => {
+        return fetch(`${apiSettings.baseUrl}/jobtypes`, {
+            headers: apiHeaders()
+        })
+            .then(res => res.json())
+            .then(setJobTypes)
+    }
+
     return <JobsContext.Provider value={{
         userJobs,
         getAllUserJobs,
         createJob,
         getJobById,
         editJob,
-        deleteJob
+        deleteJob,
+        jobTypes,
+        getJobTypes
     }}>
         {props.children}
     </JobsContext.Provider>

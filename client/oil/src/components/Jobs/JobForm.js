@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const JobForm = props => {
-    const { createJob, getJobById, editJob } = useContext(JobsContext)
+    const { createJob, getJobById, editJob, getJobTypes, jobTypes } = useContext(JobsContext)
     const { jobId } = useParams()
     const classes = useStyles(props.theme);
     const userId = parseInt(sessionStorage.getItem(userIdStorageKey))
@@ -50,9 +50,14 @@ export const JobForm = props => {
     })
 
     useEffect(() => {
+        getJobTypes()
         if (jobId) {
             getJobById(jobId)
-                .then(setFormJob)
+                .then(job => {
+                    const editJob = {...job}
+                    editJob.type = job.type.id
+                    setFormJob(editJob)
+                })
         }
     }, [jobId])
 
@@ -96,8 +101,7 @@ export const JobForm = props => {
                         name="description"
                         label="Description"
                         aria-label="Description"
-                        variant="outlined" 
-                        required />
+                        variant="outlined"  />
                     <TextField onChange={handleFormChange}
                         value={formJob.frequency}
                         type="number"
@@ -132,9 +136,9 @@ export const JobForm = props => {
                         onChange={handleFormChange}
                         value={formJob.type}
                         required>
-                        <MenuItem value={1}>Get</MenuItem>
-                        <MenuItem value={2}>Job</MenuItem>
-                        <MenuItem value={3}>Types</MenuItem>
+                        {
+                            jobTypes.map(jT => <MenuItem key={jT.id} value={jT.id}>{jT.title}</MenuItem>)
+                        }
                     </TextField>
                     <Button
                         type="submit"
