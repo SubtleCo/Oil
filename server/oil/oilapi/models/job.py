@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 class Job(models.Model):
     title = models.CharField(max_length=50)
+    description = models.TextField(max_length=250, null=True)
     type = models.ForeignKey("JobType", on_delete=models.DO_NOTHING)
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="job_creator")
     frequency = models.IntegerField(default=1)

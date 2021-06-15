@@ -14,9 +14,19 @@ export const JobsProvider = props => {
             .then(setUserJobs)
     }
 
+    const createJob = newJob => {
+        return fetch(`${apiSettings.baseUrl}/jobs`, {
+            method: "POST",
+            headers: apiHeaders(),
+            body: JSON.stringify(newJob)
+        })
+            .then(res => res.json())
+    }
+
     return <JobsContext.Provider value={{
         userJobs,
-        getAllUserJobs
+        getAllUserJobs,
+        createJob
     }}>
         {props.children}
     </JobsContext.Provider>
