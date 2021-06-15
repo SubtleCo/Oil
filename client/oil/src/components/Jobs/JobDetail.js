@@ -7,10 +7,11 @@ import { makeStyles, Typography } from '@material-ui/core'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Fab from '@material-ui/core/Fab'
-import AddIcon from '@material-ui/icons/Add'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import ShareIcon from '@material-ui/icons/Share';
+import Modal from '@material-ui/core/Modal'
+import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles(theme => ({
     outerPaper: {
@@ -49,19 +50,44 @@ const useStyles = makeStyles(theme => ({
     deleteButton: {
         background: theme.palette.error.light
     },
+    deleteModal: {
+        display: "flex",
+        position: 'absolute',
+        top: "40vh",
+        left: "20vw",
+        width: "40vw",
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    }
 }))
 
 export const JobDetail = props => {
     const classes = useStyles(props.theme);
     const { jobId } = useParams()
-    const { getJobById } = useContext(JobsContext)
+    const { getJobById, deleteJob } = useContext(JobsContext)
     const [job, setJob] = useState({})
     const history = useHistory()
+    const [modalOpen, setModalOpen] = useState(false)
 
     useEffect(() => {
         getJobById(parseInt(jobId))
             .then(setJob)
     }, [])
+
+    const handleModalOpen = () => {
+        setModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setModalOpen(false);
+    };
+
+    const handleDelete = () => {
+        deleteJob(jobId)
+        history.push("/jobs")
+    }
 
     return (
         <>
@@ -95,10 +121,22 @@ export const JobDetail = props => {
                 <Fab onClick={() => history.push(`/jobs/${job.id}/edit`)} className={`${classes.jobDetailButton} ${classes.editButton}`}>
                     <EditIcon />
                 </Fab>
-                <Fab onClick={() => history.push(`/jobs/create`)} className={`${classes.jobDetailButton} ${classes.deleteButton}`}>
+                <Fab onClick={handleModalOpen} className={`${classes.jobDetailButton} ${classes.deleteButton}`}>
                     <DeleteIcon />
                 </Fab>
             </section>
+            <Modal
+                open={modalOpen}
+                onClose={handleModalClose}
+                aria-labelledby="delete-confirm-modal"
+                aria-describedby="delete-confirm-modal"
+            >
+                <Paper className={classes.deleteModal}>Are you sure?
+                    <Button onClick={handleDelete} className={`${classes.jobDetailButton} ${classes.deleteButton}`}>
+                        Delete
+                    </Button>
+                </Paper>
+            </Modal>
         </>
     )
 }

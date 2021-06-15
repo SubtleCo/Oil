@@ -39,12 +39,20 @@ export const JobsProvider = props => {
             .then(res => res.json())
     }
 
+    const deleteJob = id => {
+        return fetch(`${apiSettings.baseUrl}/jobs/${id}`, {
+            method: "DELETE",
+            headers: apiHeaders()
+        })
+    }
+
     return <JobsContext.Provider value={{
         userJobs,
         getAllUserJobs,
         createJob,
         getJobById,
-        editJob
+        editJob,
+        deleteJob
     }}>
         {props.children}
     </JobsContext.Provider>
