@@ -19,7 +19,8 @@ const useStyles = makeStyles(theme => ({
             margin: theme.spacing(1),
             height: "fit-content",
         },
-        marginBottom: "7vh"
+        marginBottom: "7vh",
+        marginTop: "12vh"
     },
     fabs: {
         margin: theme.spacing(1),
