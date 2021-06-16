@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
         background: theme.palette.success.light,
     },
     medPriority: {
-        background: theme.palette.secondary.light
+        background: theme.palette.secondary.main
     },
     highPriority: {
         background: theme.palette.error.light
@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     },
     noJobs: {
         marginTop: "50%",
-        marginLeft: "30%",
+        textAlign: "center"
     }
 }))
 
@@ -99,11 +99,11 @@ export const Today = props => {
             <div className={classes.root}>
                 <Typography variant="h5" className={classes.pageHeader}>Wow, it's already {niceDay}?</Typography>
                 {/* Only include the Paper component if there are jobs to do */}
-                { !!dueJobs.length && <Paper className={classes.todayPaper} elevation={3}>
+                {!!dueJobs.length && <Paper className={classes.todayPaper} elevation={3}>
                     <List className={classes.todayList}>
                         {
                             // Determine color of job background based on how overdue it is
-                            dueJobs.map((j,i) => {
+                            dueJobs.map((j, i) => {
                                 let priority = classes.lowPriority
                                 if (j.days_lapsed > 2) priority = classes.medPriority
                                 if (j.days_lapsed > 6) priority = classes.highPriority
@@ -125,8 +125,12 @@ export const Today = props => {
                         }
                     </List>
                 </Paper>}
-                {/* If there are no jobs to do, show the logo */}
-                {dueJobs.length == 0 && <Typography className={classes.noJobs}>Sheesh, you're good.</Typography>}
+                {/* If there are no jobs to do, show the logo (or at least some text) */}
+                {dueJobs.length == 0 &&
+                    <div className={classes.noJobs}>
+                        <Typography >Sheesh, you're good.</Typography>
+                        <Typography >No jobs here!</Typography>
+                    </div>}
             </div>
         </>
     )
