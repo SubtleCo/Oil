@@ -11,13 +11,14 @@ const useStyles = makeStyles(theme => (
             },
             background: theme.palette.secondary.main,
             width: '100%',
-            position: 'fixed',
+            position: 'sticky',
             top: 0,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             paddingTop: "2vh",
-            fontFamily: "roboto"
+            fontFamily: "roboto",
+            zIndex: 2
         }
     }
 ))

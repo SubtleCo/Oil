@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
             height: "fit-content",
         },
         marginBottom: "7vh",
-        marginTop: "12vh",
+        marginTop: "2vh",
         borderRadius: "5px",
     },
     todayList: {

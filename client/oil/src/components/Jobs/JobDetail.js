@@ -105,7 +105,6 @@ export const JobDetail = props => {
 
     return (
         <>
-            <Typography component="h2" variant="h2" align='center'>Job Detail</Typography>
             <Paper className={classes.outerPaper} elevation={6}>
                 <Typography component="h4" variant="h4" align='center'>{job.title}</Typography>
                 <Typography className={`${classes.details} ${classes.detailRight}`} component="p" variant="p" align='left'>({job.type?.title})</Typography>

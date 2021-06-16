@@ -20,7 +20,7 @@ class UserView(ViewSet):
     # Allows for email or username search
     def list(self, request):
         key = request.query_params.get('search', None)
-        if key is not None:
+        if key is not None and key is not "":
             try:
                 users = User.objects.filter(
                     Q(email__icontains=key) |
