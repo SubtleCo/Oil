@@ -5,7 +5,7 @@ import { userTokenStorageKey } from './auth/authSettings'
 import { Login } from './auth/Login'
 import { Register } from './auth/Register'
 import { Footer } from './Footer/Footer'
-import { JobForm } from './Jobs/JobForm'
+import { Header } from './Header/Header'
 
 export const Oil = ({ theme }) => {
     return (
@@ -14,7 +14,7 @@ export const Oil = ({ theme }) => {
                 if (sessionStorage.getItem(userTokenStorageKey)) {
                     return (
                         <>
-                            <p style={{backgroundColor: "yellow"}}>Stick a header here</p>
+                            <Header />
                             <ApplicationViews/>
                             <Footer theme={theme}/>
                         </>

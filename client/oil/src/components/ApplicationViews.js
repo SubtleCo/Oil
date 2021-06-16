@@ -1,16 +1,18 @@
+
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { JobDetail } from './Jobs/JobDetail'
 import { JobForm } from './Jobs/JobForm'
 import { JobsList } from './Jobs/JobsList'
 import { JobsProvider } from './Jobs/JobsProvider'
+import { Today } from './Jobs/Today'
 
 export const ApplicationViews = () => {
     return (
         <>
             <JobsProvider>
                 <Route exact path="/">
-                    <p>Today View goes here</p>
+                    <Today />
                 </Route>
 
                 <Route exact path="/jobs">
