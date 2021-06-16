@@ -16,7 +16,8 @@ const useStyles = makeStyles(theme => (
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            paddingTop: "2vh"
+            paddingTop: "2vh",
+            fontFamily: "roboto"
         }
     }
 ))

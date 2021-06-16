@@ -15,7 +15,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import DoneIcon from '@material-ui/icons/Done';
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 import Fab from '@material-ui/core/Fab'
 
 const useStyles = makeStyles(theme => ({
@@ -62,6 +62,10 @@ const useStyles = makeStyles(theme => ({
         borderBottomLeftRadius: 5,
         borderBottomRightRadius: 5,
     },
+    noJobs: {
+        marginTop: "50%",
+        marginLeft: "30%",
+    }
 }))
 
 export const Today = props => {
@@ -93,7 +97,7 @@ export const Today = props => {
     return (
         <>
             <div className={classes.root}>
-                <h2 className={classes.pageHeader}>Wow, it's already {niceDay}?</h2>
+                <Typography variant="h5" className={classes.pageHeader}>Wow, it's already {niceDay}?</Typography>
                 {/* Only include the Paper component if there are jobs to do */}
                 { !!dueJobs.length && <Paper className={classes.todayPaper} elevation={3}>
                     <List className={classes.todayList}>
@@ -121,6 +125,8 @@ export const Today = props => {
                         }
                     </List>
                 </Paper>}
+                {/* If there are no jobs to do, show the logo */}
+                {dueJobs.length == 0 && <Typography className={classes.noJobs}>Sheesh, you're good.</Typography>}
             </div>
         </>
     )
