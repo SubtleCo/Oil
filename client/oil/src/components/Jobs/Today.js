@@ -14,10 +14,8 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
-import AddIcon from '@material-ui/icons/Add'
 import DoneIcon from '@material-ui/icons/Done';
 import { makeStyles } from '@material-ui/core'
-import { useHistory } from 'react-router'
 import Fab from '@material-ui/core/Fab'
 
 const useStyles = makeStyles(theme => ({
@@ -67,21 +65,21 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const Today = props => {
-    const history = useHistory()
     const { userJobs, getAllUserJobs, completeJob } = useContext(JobsContext)
     const [dueJobs, setDueJobs] = useState([])
     const classes = useStyles()
 
-    // Pretty day
+    // Generate a day of the week to display as a welcome
     const day = new Date().getDay()
     console.log(day)
-    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     const niceDay = days[day]
 
     useEffect(() => {
         getAllUserJobs()
     }, [])
 
+    // Filter all user jobs to only include those due
     useEffect(() => {
         setDueJobs(userJobs.filter(j => j.days_lapsed >= 0))
     }, [userJobs])
@@ -96,13 +94,16 @@ export const Today = props => {
         <>
             <div className={classes.root}>
                 <h2 className={classes.pageHeader}>Wow, it's already {niceDay}?</h2>
+                {/* Only include the Paper component if there are jobs to do */}
                 { !!dueJobs.length && <Paper className={classes.todayPaper} elevation={3}>
                     <List className={classes.todayList}>
                         {
+                            // Determine color of job background based on how overdue it is
                             dueJobs.map((j,i) => {
                                 let priority = classes.lowPriority
                                 if (j.days_lapsed > 2) priority = classes.medPriority
                                 if (j.days_lapsed > 6) priority = classes.highPriority
+                                // Add border radius to top and bottom items
                                 if (i == 0) priority = `${priority} ${classes.topItem}`
                                 if (i == dueJobs.length - 1) priority = `${priority} ${classes.bottomItem}`
 
@@ -110,7 +111,7 @@ export const Today = props => {
                                     <ListItem className={priority} key={j.id}>
                                         <ListItemText primary={j.title} />
                                         <ListItemIcon onClick={handleDone} id={"job--" + j.id}>
-                                            <Fab className={classes.fabs} aria-label="edit">
+                                            <Fab className={classes.fabs} aria-label="done">
                                                 <DoneIcon />
                                             </Fab>
                                         </ListItemIcon>
