@@ -6,7 +6,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import AddIcon from '@material-ui/icons/Add'
-import MenuOpenIcon from '@material-ui/icons/MenuOpen';
+import DoneIcon from '@material-ui/icons/Done';
 import { makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router'
 import Fab from '@material-ui/core/Fab'
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     fabs: {
         margin: theme.spacing(1),
         alignSelf: 'flex-end',
-        background: theme.palette.success.light
+        background: theme.palette.info.light
     },
     pageHeader: {
         alignSelf: "center",
@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 export const Today = props => {
     const history = useHistory()
-    const { userJobs, getAllUserJobs } = useContext(JobsContext)
+    const { userJobs, getAllUserJobs, completeJob } = useContext(JobsContext)
     const classes = useStyles()
 
     // Pretty day
@@ -57,8 +57,10 @@ export const Today = props => {
         getAllUserJobs()
     }, [])
 
-    const ListLink = props => {
-        return <ListItem button component="a" {...props} />
+    const handleDone = e => {
+        const jobId = e.target.id.split("--")[1]
+        console.log(jobId)
+        completeJob(jobId)
     }
 
     return (
@@ -72,13 +74,13 @@ export const Today = props => {
                                 if (j.days_lapsed >= 0) {
                                     let priority = classes.lowPriority
                                     if (j.days_lapsed > 2) priority = classes.medPriority
-                                    if (j.days_lapsed > 5) priority = classes.highPriority
+                                    if (j.days_lapsed > 6) priority = classes.highPriority
                                     return (
                                         <ListItem className={priority} key={j.id}>
                                             <ListItemText primary={j.title} />
-                                            <ListItemIcon>
-                                                <Fab onClick={() => history.push(`/jobs/${j.id}`)} color="secondary" aria-label="edit">
-                                                    <MenuOpenIcon />
+                                            <ListItemIcon id={"list-item-icon-job--" + j.id}>
+                                                <Fab className={classes.fabs} onClick={handleDone} id={"job--" + j.id} aria-label="edit">
+                                                    <DoneIcon id={"icon-job--" + j.id}/>
                                                 </Fab>
                                             </ListItemIcon>
                                         </ListItem>
