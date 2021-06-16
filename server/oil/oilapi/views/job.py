@@ -176,3 +176,30 @@ class JobView(ViewSet):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             except ValidationError as ex:
                 return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Mark a job as newly completed
+    @action(methods=['GET'], detail=True)
+    def complete(self, request, pk=None):
+        user = request.auth.user
+
+        # Make sure the job exists
+        try:
+            job = Job.objects.get(pk=pk)
+        except Job.DoesNotExist as ex:
+            return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
+
+        # Make sure the user is authorized to complete the job
+        # if user not in job.users:
+        #     return Response("You cannont complete a job you are not subscribed to", status=status.HTTP_401_UNAUTHORIZED)
+
+        job.last_completed_by = user
+        job.last_completed = date.today()
+
+        try:
+            job.save()
+            return Response(None, status=status.HTTP_204_NO_CONTENT)
+        except ValidationError as ex:
+            return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+
+
+

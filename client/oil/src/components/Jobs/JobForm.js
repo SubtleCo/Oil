@@ -16,6 +16,8 @@ const useStyles = makeStyles(theme => ({
         width: "90%",
         margin: "auto",
         paddingTop: "0.5em",
+        marginBottom: "7vh",
+        marginTop: "15vh"
     },
     form: {
         width: "100%",

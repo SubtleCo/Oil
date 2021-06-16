@@ -55,6 +55,12 @@ export const JobsProvider = props => {
             .then(setJobTypes)
     }
 
+    const completeJob = id => {
+        return fetch(`${apiSettings.baseUrl}/jobs/${id}/complete`, {
+            headers: apiHeaders()
+        })
+    }
+
     return <JobsContext.Provider value={{
         userJobs,
         getAllUserJobs,
@@ -63,7 +69,8 @@ export const JobsProvider = props => {
         editJob,
         deleteJob,
         jobTypes,
-        getJobTypes
+        getJobTypes,
+        completeJob
     }}>
         {props.children}
     </JobsContext.Provider>
