@@ -14,10 +14,15 @@ export const PeopleProvider = props => {
             .then(setFoundPeople)
     }
 
+    const resetSearch = () => {
+        setFoundPeople([])
+    }
+
     return (
         <PeopleContext.Provider value={{
             searchPeople,
-            foundPeople
+            foundPeople,
+            resetSearch
         }}>
             {props.children}
         </PeopleContext.Provider>

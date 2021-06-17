@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 export const PeopleSearch = props => {
     const [searchKey, setSearchKey] = useState("")
     const classes = useStyles(props.theme)
-    const { searchPeople, foundPeople } = useContext(PeopleContext)
+    const { searchPeople, resetSearch, foundPeople } = useContext(PeopleContext)
 
     const handleSearchChange = e => {
         const newKey = e.target.value
@@ -58,8 +58,11 @@ export const PeopleSearch = props => {
             e.preventDefault()
             searchPeople(searchKey)
         }
-
     }
+    
+    useEffect(() => {
+        resetSearch()
+    }, [])
 
     return (
         <>
@@ -81,7 +84,6 @@ export const PeopleSearch = props => {
                 <List>
                     {
                         foundPeople.map(p => {
-                            if (p.id != sessionStorage.getItem(userIdStorageKey)) {
                                 return (
                                     <ListItem key={p.id}>
                                         <ListItemText primary={p.first_name + ' ' + p.last_name} />
@@ -92,7 +94,6 @@ export const PeopleSearch = props => {
                                         </ListItemIcon>
                                     </ListItem>
                                 )
-                            }
                         })
                     }
                 </List>
