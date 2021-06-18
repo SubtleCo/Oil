@@ -62,7 +62,7 @@ export const Footer = ({ theme }) => {
         <BottomNavigation value={value} onChange={handleChange} className={classes.stickToBottom} showLabels>
             <BottomNavigationAction classes={classes} label="Today" value="today" onClick={() => history.push("/")} icon={<WbSunnyIcon />} />
             <BottomNavigationAction classes={classes} label="Jobs" value="jobs" onClick={() => history.push("/jobs")} icon={<WorkIcon />} />
-            <BottomNavigationAction classes={classes} label="People" value="people" onClick={() => history.push("/people")} icon={<PeopleIcon />} />
+            <BottomNavigationAction classes={classes} label="Folks" value="folks" onClick={() => history.push("/people")} icon={<PeopleIcon />} />
             <BottomNavigationAction aria-controls="simple-menu" aria-haspopup="true" onClick={handleProfileMenu} classes={classes} label="Me" value="profile" icon={<FaceIcon />} />
             <Menu
                 id="simple-menu"

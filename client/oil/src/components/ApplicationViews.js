@@ -6,6 +6,8 @@ import { JobForm } from './Jobs/JobForm'
 import { JobsList } from './Jobs/JobsList'
 import { JobsProvider } from './Jobs/JobsProvider'
 import { Today } from './Jobs/Today'
+import { PeopleProvider } from './People/PeopleProvider'
+import { PeopleSearch } from './People/PeopleSearch'
 
 export const ApplicationViews = () => {
     return (
@@ -31,9 +33,11 @@ export const ApplicationViews = () => {
                     <JobForm />
                 </Route>
 
-                <Route exact path="/people">
-                    <p>People List goes here</p>
-                </Route>
+                <PeopleProvider>
+                    <Route exact path="/people">
+                        <PeopleSearch />
+                    </Route>
+                </PeopleProvider>
 
                 <Route exact path="/profile">
                     <p>Profile Edit goes here</p>

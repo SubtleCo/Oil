@@ -24,7 +24,7 @@ export const Register = () => {
     useEffect(() => {
         // Check to see if a user is logged in (editing account) or not (adding account)
         if (loggedInUserId) {
-            return fetch(`${authApi.localApiBaseUrl}/${authApi.endpoint}/${loggedInUserId}`)
+            return fetch(`${authApi.localApiBaseUrl}/users/${loggedInUserId}`)
                 .then(res => res.json())
                 .then(setRegisterUser)
         }
@@ -49,7 +49,7 @@ export const Register = () => {
     }
 
     const editUser = () => {
-        return fetch(`${authApi.localApiBaseUrl}/${authApi.endpoint}/${loggedInUserId}`, {
+        return fetch(`${authApi.localApiBaseUrl}/users/${loggedInUserId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"

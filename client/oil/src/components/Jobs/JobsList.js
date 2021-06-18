@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
             height: "fit-content",
         },
         marginBottom: "7vh",
-        marginTop: "12vh"
+        marginTop: "2vh"
     },
     fabs: {
         margin: theme.spacing(1),
@@ -41,10 +41,6 @@ export const JobsList = props => {
     useEffect(() => {
         getAllUserJobs()
     }, [])
-
-    const ListLink = props => {
-        return <ListItem button component="a" {...props} />
-    }
 
     return (
         <>
