@@ -30,6 +30,13 @@ export const PeopleProvider = props => {
         })
     }
 
+    // id here is the user_pair object id, not a user id /friends/pk/accept
+    const acceptUser = id => {
+        return fetch(`${apiSettings.baseUrl}/friends/${id}/accept`, {
+            headers: apiHeaders()
+        })
+    }
+
     const searchPeople = key => {
         return fetch(`${apiSettings.baseUrl}/users?search=${key}`, {
             headers: apiHeaders()
@@ -48,6 +55,7 @@ export const PeopleProvider = props => {
             getFriends,
             inviteUser,
             rejectUser,
+            acceptUser,
             searchPeople,
             foundPeople,
             resetSearch
