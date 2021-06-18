@@ -26,7 +26,7 @@ class UserPairSerializer(serializers.ModelSerializer):
 
 class UserPairView(ViewSet):
 
-    # Sending a POST to /friends/pk/invite will invite a friend
+    # Sending a GET to /friends/pk/invite will invite a friend
     @action(methods=['get'], detail=True)
     def invite(self, request, pk=None):
         if request.method == "GET":
@@ -87,9 +87,11 @@ class UserPairView(ViewSet):
             return Response({"reason": ex.args[0]}, status=status.HTTP_401_UNAUTHORIZED)
 
     # Accept an invite from another user if user == user_2 in the UserPair
-    @action(methods=['put'], detail=True)
+    # Sending a GET to /friends/pk/accept will invite a friend
+    # pk == user_pair.id
+    @action(methods=['get'], detail=True)
     def accept(self, request, pk=None):
-        if request.method == "PUT":
+        if request.method == "GET":
             user = request.auth.user
 
             try:

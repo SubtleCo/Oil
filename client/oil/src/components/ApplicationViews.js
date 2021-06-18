@@ -8,6 +8,7 @@ import { JobsProvider } from './Jobs/JobsProvider'
 import { Today } from './Jobs/Today'
 import { PeopleProvider } from './People/PeopleProvider'
 import { PeopleSearch } from './People/PeopleSearch'
+import { PeopleList } from './People/PeopleList'
 
 export const ApplicationViews = () => {
     return (
@@ -36,6 +37,7 @@ export const ApplicationViews = () => {
                 <PeopleProvider>
                     <Route exact path="/people">
                         <PeopleSearch />
+                        <PeopleList />
                     </Route>
                 </PeopleProvider>
 
