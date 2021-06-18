@@ -42,10 +42,6 @@ export const JobsList = props => {
         getAllUserJobs()
     }, [])
 
-    const ListLink = props => {
-        return <ListItem button component="a" {...props} />
-    }
-
     return (
         <>
             <div className={classes.root}>

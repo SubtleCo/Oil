@@ -4,7 +4,25 @@ import { apiSettings, apiHeaders } from '../Settings'
 export const PeopleContext = createContext()
 
 export const PeopleProvider = props => {
+    const [friends, setFriends] = useState([])
     const [foundPeople, setFoundPeople] = useState([])
+
+    const getFriends = () => {
+        return fetch(`${apiSettings.baseUrl}/friends`, {
+            headers: apiHeaders()
+        })
+            .then(res => res.json())
+            .then(setFriends)
+    }
+
+    const inviteUser = id => {
+        return fetch(`${apiSettings.baseUrl}/friends/${id}/invite`, {
+            method: "GET",
+            headers: apiHeaders()
+        })
+            .then(res => res.json())
+            .then(setFriends)
+    }
 
     const searchPeople = key => {
         return fetch(`${apiSettings.baseUrl}/users?search=${key}`, {
@@ -20,6 +38,9 @@ export const PeopleProvider = props => {
 
     return (
         <PeopleContext.Provider value={{
+            friends,
+            getFriends,
+            inviteUser,
             searchPeople,
             foundPeople,
             resetSearch

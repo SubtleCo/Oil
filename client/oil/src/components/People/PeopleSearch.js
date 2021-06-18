@@ -12,8 +12,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Fab from '@material-ui/core/Fab'
-import MenuOpenIcon from '@material-ui/icons/MenuOpen';
+import AddIcon from '@material-ui/icons/Add';
 import { userIdStorageKey } from '../auth/authSettings';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -44,9 +45,10 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const PeopleSearch = props => {
+    const history = useHistory()
     const [searchKey, setSearchKey] = useState("")
     const classes = useStyles(props.theme)
-    const { searchPeople, resetSearch, foundPeople } = useContext(PeopleContext)
+    const { searchPeople, resetSearch, foundPeople, inviteUser } = useContext(PeopleContext)
 
     const handleSearchChange = e => {
         const newKey = e.target.value
@@ -58,6 +60,12 @@ export const PeopleSearch = props => {
             e.preventDefault()
             searchPeople(searchKey)
         }
+    }
+
+    const handleInvite = e => {
+        inviteUser(e.currentTarget.id)
+        resetSearch()
+        history.push('/people')
     }
     
     useEffect(() => {
@@ -88,8 +96,8 @@ export const PeopleSearch = props => {
                                     <ListItem key={p.id}>
                                         <ListItemText primary={p.first_name + ' ' + p.last_name} />
                                         <ListItemIcon>
-                                            <Fab onClick={console.log("invite")} color="secondary" aria-label="invite">
-                                                <MenuOpenIcon />
+                                            <Fab onClick={handleInvite} id={p.id} color="secondary" aria-label="invite">
+                                                <AddIcon />
                                             </Fab>
                                         </ListItemIcon>
                                     </ListItem>

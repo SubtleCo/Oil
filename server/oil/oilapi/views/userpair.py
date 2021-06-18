@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 class UserSerializer(serializers.ModelSerializer):
+    """Simple JSON serializer for User to protect sensative data"""
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name']
@@ -26,35 +27,37 @@ class UserPairSerializer(serializers.ModelSerializer):
 class UserPairView(ViewSet):
 
     # Sending a POST to /friends/pk/invite will invite a friend
-    @action(methods=['post'], detail=True)
+    @action(methods=['get'], detail=True)
     def invite(self, request, pk=None):
-        user = request.auth.user
-        user_2 = User.objects.get(pk=pk)
+        if request.method == "GET":
+            user = request.auth.user
+            user_2 = User.objects.get(pk=pk)
 
-        # Make sure the user isn't trying to befriend themself
-        if user == user_2:
-            return Response('No, you cannot befriend yourself.', status=status.HTTP_400_BAD_REQUEST)
+            # Make sure the user isn't trying to befriend themself
+            if user == user_2:
+                return Response('No, you cannot befriend yourself.', status=status.HTTP_400_BAD_REQUEST)
 
-        # Make sure this relationship does not already exist
+            # Make sure this relationship does not already exist
 
-        try:
-            UserPair.objects.get(Q(user_1=user) & Q(user_2=user_2))
-            return Response('You cannot double invite someone!', status=status.HTTP_401_UNAUTHORIZED)
-        except:
-            pass
+            try:
+                UserPair.objects.get(Q(user_1=user) & Q(user_2=user_2))
+                return Response('You cannot double invite someone!', status=status.HTTP_401_UNAUTHORIZED)
+            except:
+                pass
 
-        req = request.data
-        user_pair = UserPair()
-        user_pair.user_1 = user
-        user_pair.user_2 = user_2
+            req = request.data
+            user_pair = UserPair()
+            user_pair.user_1 = user
+            user_pair.user_2 = user_2
 
+            try:
+                user_pair.save()
+                serializer = UserPairSerializer(user_pair, context={'request': request})
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except ValidationError as ex:
+                return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            user_pair.save()
-            serializer = UserPairSerializer(user_pair, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except ValidationError as ex:
-            return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     # Return a list of friendships the user is part of
     def list(self, request):

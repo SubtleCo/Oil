@@ -22,7 +22,7 @@ class UserView(ViewSet):
     def list(self, request):
         user = request.auth.user
         key = request.query_params.get('search', None)
-        if key is not None and key is not "":
+        if key != None:
             try:
                 users = User.objects.filter(
                     Q(email__icontains=key) |
