@@ -20,8 +20,14 @@ export const PeopleProvider = props => {
             method: "GET",
             headers: apiHeaders()
         })
-            .then(res => res.json())
-            .then(setFriends)
+    }
+
+    // id here is the user_pair object id, not a user id
+    const rejectUser = id => {
+        return fetch(`${apiSettings.baseUrl}/friends/${id}`, {
+            method: "DELETE",
+            headers: apiHeaders()
+        })
     }
 
     const searchPeople = key => {
@@ -41,6 +47,7 @@ export const PeopleProvider = props => {
             friends,
             getFriends,
             inviteUser,
+            rejectUser,
             searchPeople,
             foundPeople,
             resetSearch

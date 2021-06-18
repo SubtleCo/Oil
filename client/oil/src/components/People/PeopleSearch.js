@@ -13,7 +13,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add';
-import { userIdStorageKey } from '../auth/authSettings';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -48,7 +47,7 @@ export const PeopleSearch = props => {
     const history = useHistory()
     const [searchKey, setSearchKey] = useState("")
     const classes = useStyles(props.theme)
-    const { searchPeople, resetSearch, foundPeople, inviteUser } = useContext(PeopleContext)
+    const { searchPeople, resetSearch, foundPeople, inviteUser, getFriends } = useContext(PeopleContext)
 
     const handleSearchChange = e => {
         const newKey = e.target.value
@@ -59,13 +58,17 @@ export const PeopleSearch = props => {
         if (searchKey != "") {
             e.preventDefault()
             searchPeople(searchKey)
+            setSearchKey("")
         }
+
     }
 
     const handleInvite = e => {
         inviteUser(e.currentTarget.id)
-        resetSearch()
-        history.push('/people')
+            .then(() => {
+                resetSearch()
+                getFriends()
+            })
     }
     
     useEffect(() => {
@@ -79,6 +82,7 @@ export const PeopleSearch = props => {
                 <InputBase
                     className={classes.input}
                     placeholder="email or username"
+                    value={searchKey}
                     inputProps={{ 'aria-label': 'email or username' }}
                     onChange={handleSearchChange}
                     required
