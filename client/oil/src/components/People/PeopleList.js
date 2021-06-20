@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme => ({
 
 export const PeopleList = props => {
     const classes = useStyles(props.theme)
-    const { friends, getFriends, rejectUser, acceptUser } = useContext(PeopleContext)
+    const { friendPairs, getFriendPairs, rejectUser, acceptUser } = useContext(PeopleContext)
     const [pendingFriends, setPendingFriends] = useState([])
     const [awaitingFriends, setAwaitingFriends] = useState([])
     const [confirmedFriends, setConfirmedFriends] = useState([])
@@ -84,40 +84,46 @@ export const PeopleList = props => {
     const userId = parseInt(sessionStorage.getItem(userIdStorageKey))
 
     useEffect(() => {
-        getFriends()
+        getFriendPairs()
     }, [])
 
     useEffect(() => {
-        setPendingFriends(friends.filter(pair => {
+        // Filter friend pairs in which the user has invited someone and is waiting
+        setPendingFriends(friendPairs.filter(pair => {
             return pair.accepted == false && pair.user_1.id == userId
         }))
-        setAwaitingFriends(friends.filter(pair => {
+        // Filter friend pairs in which the user needs to respond to an invitation
+        setAwaitingFriends(friendPairs.filter(pair => {
             return pair.accepted == false && pair.user_2.id == userId
         }))
-        setConfirmedFriends(friends.filter(pair => {
+        // Filter friend pairs in which the pair is confirmed friends
+        setConfirmedFriends(friendPairs.filter(pair => {
             return pair.accepted == true
         }))
-    }, [friends])
+    }, [friendPairs])
 
     const confirmDelete = e => {
+        // Grab the friend pair ID, then stage it for deletion in rejectedFriend
         const inviteId = e.currentTarget.id.split("--")[1]
         setRejectedFriend(parseInt(inviteId))
         setModalOpen(true)
     }
     const handleAccept = e => {
+        // Grab the friend pair ID, then send an "accepted" request
         const inviteId = e.currentTarget.id.split("--")[1]
         acceptUser(inviteId)
             .then(() => {
-                getFriends()
+                getFriendPairs()
             })
     }
 
     const handleReject = e => {
+        // Confirmed rejection - send a delete request for the friend pair
         rejectUser(rejectedFriend)
             .then(() => {
                 setRejectedFriend(0)
                 setModalOpen(false)
-                getFriends()
+                getFriendPairs()
             })
     }
 
@@ -187,11 +193,15 @@ export const PeopleList = props => {
                         {
                             confirmedFriends.map((f, i) => {
                                 let thisClass = `${classes.confirmed}`
+                                // add a border radius to top and bottom list items
                                 if (i == 0) thisClass += ` ${classes.topItem}`
                                 if (i == confirmedFriends.length - 1) thisClass += ` ${classes.bottomItem}`
+                                // Assign friend to the non-current user of the user_pair
+                                let friend = f.user_1
+                                if (f.user_1.id === userId) friend = f.user_2
                                 return (
-                                    <ListItem className={thisClass} key={f.id}>
-                                        <ListItemText primary={f.user_1.first_name + ' ' + f.user_1.last_name} />
+                                    <ListItem className={thisClass} key={friend.id}>
+                                        <ListItemText primary={friend.first_name + ' ' + friend.last_name} />
                                         <ListItemIcon onClick={confirmDelete} id={"request--" + f.id}>
                                             <Fab className={`${classes.fabs} ${classes.reject}`} id={f.id} aria-label="reject">
                                                 <ClearIcon />

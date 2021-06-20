@@ -4,15 +4,15 @@ import { apiSettings, apiHeaders } from '../Settings'
 export const PeopleContext = createContext()
 
 export const PeopleProvider = props => {
-    const [friends, setFriends] = useState([])
+    const [friendPairs, setFriendPairs] = useState([])
     const [foundPeople, setFoundPeople] = useState([])
 
-    const getFriends = () => {
+    const getFriendPairs = () => {
         return fetch(`${apiSettings.baseUrl}/friends`, {
             headers: apiHeaders()
         })
             .then(res => res.json())
-            .then(setFriends)
+            .then(setFriendPairs)
     }
 
     const inviteUser = id => {
@@ -51,8 +51,8 @@ export const PeopleProvider = props => {
 
     return (
         <PeopleContext.Provider value={{
-            friends,
-            getFriends,
+            friendPairs,
+            getFriendPairs,
             inviteUser,
             rejectUser,
             acceptUser,
