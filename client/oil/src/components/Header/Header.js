@@ -8,7 +8,7 @@ import React from 'react'
 const useStyles = makeStyles(theme => (
     {
         root: {
-            color: theme.palette.primary.main,
+            color: theme.palette.primary.main[100],
             "&$selected": {
                 color: "black"
             },

@@ -1,12 +1,12 @@
+// This module is responsible for rendering a form for the user to create/edit a job
+
 import React, { useContext, useEffect, useState } from 'react'
 import { userIdStorageKey } from '../auth/authSettings'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
-import FormControl from '@material-ui/core/FormControl'
 import Paper from '@material-ui/core/Paper'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
-import { endsWith } from 'lodash'
 import { JobsContext } from './JobsProvider'
 import { useHistory, useParams } from 'react-router-dom'
 
@@ -52,17 +52,20 @@ export const JobForm = props => {
     })
 
     useEffect(() => {
+        // Job types necessary to add a "type" to the job via a select element
         getJobTypes()
+        // check for jobId in the URL. If so, the user is editing a job.
         if (jobId) {
             getJobById(jobId)
                 .then(job => {
-                    const editJob = {...job}
+                    const editJob = { ...job }
                     editJob.type = job.type.id
                     setFormJob(editJob)
                 })
         }
     }, [jobId])
 
+    // Duplicate, alter, and set form state
     const handleFormChange = e => {
         e.preventDefault()
         const newFormJob = { ...formJob }
@@ -74,20 +77,18 @@ export const JobForm = props => {
 
     const handleSubmit = e => {
         e.preventDefault()
-        if (e.currentTarget.reportValidity()) {
-            if (jobId) {
-                editJob(formJob)
-            } else {
-                createJob(formJob)
-            }
-            history.push("/jobs")
+        if (jobId) {
+            editJob(formJob)
+        } else {
+            createJob(formJob)
         }
+        history.push("/jobs")
     }
 
     return (
         <div className="jobForm">
             <Paper className={classes.outerPaper} elevation={3}>
-                <form onSubmit={handleSubmit} className={classes.form} noValidate autoComplete="off">
+                <form onSubmit={handleSubmit} className={classes.form} reportValidity autoComplete="off">
                     <h2>New Job</h2>
                     <TextField onChange={handleFormChange}
                         value={formJob.title}
@@ -103,11 +104,11 @@ export const JobForm = props => {
                         name="description"
                         label="Description"
                         aria-label="Description"
-                        variant="outlined"  />
+                        variant="outlined" />
                     <TextField onChange={handleFormChange}
                         value={formJob.frequency}
                         type="number"
-                        inputProps={{ min: 1}}
+                        inputProps={{ min: 1 }}
                         id="frequency"
                         name="frequency"
                         label="Frequency (Days)"
@@ -130,7 +131,7 @@ export const JobForm = props => {
                     <TextField
                         id="type"
                         select
-                        inputProps={{ min: 1}}
+                        inputProps={{ min: 1 }}
                         name="type"
                         labelId="test"
                         variant="outlined"
@@ -146,7 +147,7 @@ export const JobForm = props => {
                         type="submit"
                         variant="contained"
                         className={classes.submitButton}>
-                            Save
+                        {jobId ? "Edit" : "Save"}
                     </Button>
                 </form>
             </Paper>
