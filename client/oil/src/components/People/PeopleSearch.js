@@ -47,7 +47,7 @@ export const PeopleSearch = props => {
     const history = useHistory()
     const [searchKey, setSearchKey] = useState("")
     const classes = useStyles(props.theme)
-    const { searchPeople, resetSearch, foundPeople, inviteUser, getFriends } = useContext(PeopleContext)
+    const { searchPeople, resetSearch, foundPeople, inviteUser, getFriendPairs } = useContext(PeopleContext)
 
     const handleSearchChange = e => {
         const newKey = e.target.value
@@ -67,7 +67,7 @@ export const PeopleSearch = props => {
         inviteUser(e.currentTarget.id)
             .then(() => {
                 resetSearch()
-                getFriends()
+                getFriendPairs()
             })
     }
     

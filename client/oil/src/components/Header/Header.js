@@ -1,3 +1,5 @@
+// This module is responsible for the persistent header in the app
+
 import { makeStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import React from 'react'

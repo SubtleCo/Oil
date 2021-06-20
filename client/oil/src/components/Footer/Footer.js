@@ -1,4 +1,9 @@
 // Footer module - persistant and fixed on all page views if user is logged in
+// This will be the core method of navigation for the app, consisting of:
+// - The "Today" view
+// - The "Jobs" view
+// - The "Folks" view
+// - The user's profile options, which are "Profile" to edit the profile and "Logout"
 
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 import BottomNavigation from '@material-ui/core/BottomNavigation'
@@ -13,9 +18,6 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { Link } from '@material-ui/core'
 import { useHistory } from 'react-router'
 import { userIdStorageKey, userTokenStorageKey } from '../auth/authSettings'
-
-
-
 
 export const Footer = ({ theme }) => {
     const history = useHistory()
@@ -64,6 +66,7 @@ export const Footer = ({ theme }) => {
             <BottomNavigationAction classes={classes} label="Jobs" value="jobs" onClick={() => history.push("/jobs")} icon={<WorkIcon />} />
             <BottomNavigationAction classes={classes} label="Folks" value="folks" onClick={() => history.push("/people")} icon={<PeopleIcon />} />
             <BottomNavigationAction aria-controls="simple-menu" aria-haspopup="true" onClick={handleProfileMenu} classes={classes} label="Me" value="profile" icon={<FaceIcon />} />
+            {/* Pop up menu for the profile navigation item */}
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}

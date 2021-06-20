@@ -41,8 +41,8 @@ export const Register = () => {
         setRegisterUser(newUser)
     }
 
+    // Make sure a user with that email does not already exist
     const existingUserCheck = () => {
-
         return fetch(`${authApi.localApiBaseUrl}/email?email=${registerUser.email}`)
             .then(res => res.json())
             .then(jsonRes => jsonRes.valid)
