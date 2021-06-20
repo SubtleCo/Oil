@@ -1,4 +1,5 @@
 // This module is responsible for the persistent header in the app
+// This includes the app name as well as the current date in mm/dd/yyyy format.
 
 import { makeStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
@@ -7,7 +8,7 @@ import React from 'react'
 const useStyles = makeStyles(theme => (
     {
         root: {
-            color: theme.palette.primary.main[100],
+            color: theme.palette.primary.main,
             "&$selected": {
                 color: "black"
             },
