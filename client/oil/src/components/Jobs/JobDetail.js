@@ -160,7 +160,7 @@ export const JobDetail = props => {
                 <Typography className={classes.description} component="p" variant="p" align='left'>{job.description}</Typography>
                 <Typography className={classes.details} component="p" variant="p" align='left'>Repeats every {job.frequency} days</Typography>
                 <Typography className={classes.details} component="p" variant="p" align='left'>
-                    Last completed on {lastCompletedDate} by {job.last_completed_by?.first_name}
+                    Last completed on {lastCompletedDate} by {job.last_completed_by?.id === currentUser.id ? "me" : job.last_completed_by?.first_name}
                 </Typography>
 
                 {/* Only list out the shared user section if more than one user is on jobs.users */}
