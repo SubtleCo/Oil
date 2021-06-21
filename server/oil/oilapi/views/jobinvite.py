@@ -53,6 +53,8 @@ class JobInviteView(ViewSet):
         job_invite.delete()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
+    # List all job invites that involve the user
+    # GET request to /shared
     def list(self, request):
         user = request.auth.user
 
@@ -60,10 +62,12 @@ class JobInviteView(ViewSet):
         job_invites = JobInvite.objects.filter(
             Q(inviter=user) | Q(invitee=user)
         )
+
         serializer = JobInviteSerializer(job_invites, many=True, context={'request': request})
         return Response(serializer.data)
 
     # The invitee accepts the job invitation
+    # PUT request to /shared/pk
     def update(self, request, pk=None):
         user = request.auth.user
 
@@ -73,12 +77,13 @@ class JobInviteView(ViewSet):
                 Q(invitee=user),
                 Q(accepted=False)
             )
-            job_invite.accepted = True
-            job_invite.accepted_at = datetime.now()
-            job_invite.save()
+            # job_invite.accepted = True
+            # job_invite.accepted_at = datetime.now()
+            # job_invite.save()
 
             job = job_invite.job
             job.users.add(user)
+            job_invite.delete()
             return Response(None, status=status.HTTP_204_NO_CONTENT)
         except JobInvite.DoesNotExist as ex:
             return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)

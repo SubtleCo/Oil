@@ -10,6 +10,15 @@ export const PeopleProvider = props => {
     const [friendPairs, setFriendPairs] = useState([])
     const [foundPeople, setFoundPeople] = useState([])
     const [confirmedFriends, setConfirmedFriends] = useState([])
+    const [currentUser, setCurrentUser] = useState({})
+
+    const getCurrentUser = () => {
+        return fetch(`${apiSettings.baseUrl}/users/me`,{
+            headers: apiHeaders()
+        })
+            .then(res => res.json())
+            .then(setCurrentUser)
+    }
 
     // FriendPairs contain two full users, one of which will be the current user
     const getFriendPairs = () => {
@@ -75,7 +84,9 @@ export const PeopleProvider = props => {
             foundPeople,
             resetSearch,
             confirmedFriends,
-            getConfirmedFriends
+            getConfirmedFriends,
+            getCurrentUser,
+            currentUser
         }}>
             {props.children}
         </PeopleContext.Provider>

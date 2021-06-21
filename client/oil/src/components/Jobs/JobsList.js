@@ -68,6 +68,17 @@ const useStyles = makeStyles(theme => ({
         marginLeft: "20px",
         background: theme.palette.error.light
     },
+    topItem: {
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+    },
+    bottomItem: {
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
+    },
+    inviteList: {
+        padding: 0,
+    },
 }))
 
 export const JobsList = props => {
@@ -115,8 +126,13 @@ export const JobsList = props => {
             })
     }
 
-    const handleAccept = () => {
-
+    const handleAccept = e => {
+        const inviteId = e.currentTarget.id.split("--")[1]
+        acceptJob(inviteId)
+            .then(() => {
+                getAllUserJobs()
+                getUserJobInvites()
+            })
     }
 
     const handleRejectModalClose = () => {
@@ -137,11 +153,15 @@ export const JobsList = props => {
                 {!!invitedTo.length && <div className={classes.jobInvites}>
                     <Typography align={"center"} variant={"h5"}>Your invites</Typography>
                     <Paper elevation={3}>
-                        <List>
+                        <List className={classes.inviteList}>
                             {
-                                invitedTo.map(jobInvite => {
+                                invitedTo.map((jobInvite, i) => {
+                                    let thisClass = `${classes.invited}`
+                                    // add a border radius to top and bottom list items
+                                    if (i == 0) thisClass += ` ${classes.topItem}`
+                                    if (i == invitedTo.length - 1) thisClass += ` ${classes.bottomItem}`
                                     return (
-                                        <ListItem key={jobInvite.id} className={classes.invited}>
+                                        <ListItem key={jobInvite.id} className={thisClass}>
                                             <ListItemText primary={jobInvite.job.title} />
                                             <ListItemIcon onClick={confirmReject} id={"request--" + jobInvite.id}>
                                                 <Fab className={`${classes.fabs} ${classes.reject}`} id={jobInvite.id} aria-label="reject">

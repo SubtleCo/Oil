@@ -34,3 +34,10 @@ class UserView(ViewSet):
                 return Response(serializer.data)
             except User.DoesNotExist as ex:
                 return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
+
+    # Get current user
+    @action(methods=['get'], detail=False)
+    def me(self, request):
+        user = request.auth.user
+        serializer = UserSerializer(user, context={'request': request})
+        return Response(serializer.data)

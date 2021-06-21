@@ -89,8 +89,8 @@ class JobView(ViewSet):
             job = Job.objects.get(pk=pk)
 
             # Only the creator can alter the job
-            if job.created_by != user:
-                raise ValidationError("You can only edit jobs you created.")
+            if user not in job.users.all():
+                raise ValidationError("You can only edit jobs you've been invited to or you created.")
 
             req = request.data
             job_type = JobType.objects.get(pk=req['type'])
