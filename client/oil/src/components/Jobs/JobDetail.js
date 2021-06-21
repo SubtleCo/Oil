@@ -17,6 +17,7 @@ import Button from '@material-ui/core/Button'
 import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import { PeopleContext } from '../People/PeopleProvider'
+import { userIdStorageKey } from '../auth/authSettings'
 
 const useStyles = makeStyles(theme => ({
     outerPaper: {
@@ -95,13 +96,14 @@ export const JobDetail = props => {
     const classes = useStyles(props.theme);
     const { jobId } = useParams()
     const { getJobById, deleteJob, inviteToJob } = useContext(JobsContext)
-    const { getConfirmedFriends, confirmedFriends, currentUser, getCurrentUser } = useContext(PeopleContext)
+    const { getConfirmedFriends, confirmedFriends } = useContext(PeopleContext)
     const [job, setJob] = useState({})
     const history = useHistory()
     const [modalOpen, setModalOpen] = useState(false)
     const [lastCompletedDate, setLastCompletedDate] = useState("")
     const [shareModalOpen, setShareModalOpen] = useState(false)
     const [sharingFriend, setSharingFriend] = useState(0)
+    const userId = parseInt(sessionStorage.getItem(userIdStorageKey))
 
 
     useEffect(() => {
@@ -116,7 +118,6 @@ export const JobDetail = props => {
                 setLastCompletedDate(niceDate)
             })
         getConfirmedFriends()
-        getCurrentUser()
     }, [])
 
     const handleModalOpen = () => {
@@ -160,7 +161,7 @@ export const JobDetail = props => {
                 <Typography className={classes.description} component="p" variant="p" align='left'>{job.description}</Typography>
                 <Typography className={classes.details} component="p" variant="p" align='left'>Repeats every {job.frequency} days</Typography>
                 <Typography className={classes.details} component="p" variant="p" align='left'>
-                    Last completed on {lastCompletedDate} by {job.last_completed_by?.id === currentUser.id ? "me" : job.last_completed_by?.first_name}
+                    Last completed on {lastCompletedDate} by {job.last_completed_by?.id === userId ? "me" : job.last_completed_by?.first_name}
                 </Typography>
 
                 {/* Only list out the shared user section if more than one user is on jobs.users */}
@@ -170,7 +171,7 @@ export const JobDetail = props => {
                         {
                             // Do not include the current user on the "shared with" list
                             job.users?.map(user => {
-                                if (user.id != currentUser.id) {
+                                if (user.id != userId) {
                                     return <ListItem key={user.id}>{user.first_name} {user.last_name}</ListItem>
                                 }
                             })
