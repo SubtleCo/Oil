@@ -10,6 +10,7 @@ export const JobsContext = createContext()
 export const JobsProvider = props => {
     const [userJobs, setUserJobs] = useState([])
     const [jobTypes, setJobTypes] = useState([])
+    const [userJobInvites, setUserJobInvites] = useState([])
 
     const getAllUserJobs = () => {
         return fetch(`${apiSettings.baseUrl}/jobs`, {
@@ -75,6 +76,14 @@ export const JobsProvider = props => {
         })
     }
 
+    const getUserJobInvites = () => {
+        return fetch(`${apiSettings.baseUrl}/shared`, {
+            headers: apiHeaders()
+        })
+            .then(res => res.json())
+            .then(setUserJobInvites)
+    }
+
     const acceptJob = jobInviteId => {
         return fetch(`${apiSettings.baseUrl}/shared/${jobInviteId}`, {
             method: "PUT",
@@ -101,7 +110,9 @@ export const JobsProvider = props => {
         completeJob,
         inviteToJob,
         acceptJob,
-        rejectJob
+        rejectJob,
+        getUserJobInvites,
+        userJobInvites
     }}>
         {props.children}
     </JobsContext.Provider>

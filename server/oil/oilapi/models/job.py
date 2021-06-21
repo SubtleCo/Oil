@@ -17,6 +17,6 @@ class Job(models.Model):
     def days_lapsed(self):
         """How many days have passed since last completion"""
         lapse = date.today() - self.last_completed
-        lapse_in_days = lapse.days
-        days_since_due = lapse_in_days - self.frequency
+        lapse_in_days = int(lapse.days)
+        days_since_due = lapse_in_days - int(self.frequency)
         return days_since_due

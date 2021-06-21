@@ -143,8 +143,8 @@ class JobView(ViewSet):
         # Make sure users are friends
         try:
             friends = UserPair.objects.get(
-                Q(user_1=user),
-                Q(user_2=user_2),
+                Q(user_1=user) & Q(user_2=user_2) |
+                Q(user_2=user) & Q(user_1=user_2),
                 Q(accepted=True)
             )
         except UserPair.DoesNotExist:

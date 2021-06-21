@@ -35,8 +35,9 @@ class JobInviteSerializer(serializers.ModelSerializer):
         fields = ['id', 'job', 'inviter', 'invitee', 'accepted']
 
 # accessed with url '/shared/pk'
+# pk is for JobInvite, not job
 class JobInviteView(ViewSet):
-    # Sending a DELETE request to /jobs/pk/share will delete an existing invitation
+    # Sending a DELETE request to /shared/pk will delete an existing invitation
     def destroy(self, request, pk=None):
         user = request.auth.user
 
