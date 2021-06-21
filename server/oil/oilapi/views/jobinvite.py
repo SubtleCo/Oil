@@ -32,7 +32,7 @@ class JobInviteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobInvite
-        fields = ['id', 'job', 'inviter', 'invitee', 'accepted']
+        fields = ['id', 'job', 'inviter', 'invitee']
 
 # accessed with url '/shared/pk'
 # pk is for JobInvite, not job
@@ -74,8 +74,7 @@ class JobInviteView(ViewSet):
         try:
             job_invite = JobInvite.objects.get(
                 Q(pk=pk),
-                Q(invitee=user),
-                Q(accepted=False)
+                Q(invitee=user)
             )
 
             job = job_invite.job

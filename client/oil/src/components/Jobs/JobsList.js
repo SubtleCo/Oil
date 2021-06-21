@@ -20,6 +20,9 @@ import ClearIcon from '@material-ui/icons/Clear'
 import DoneIcon from '@material-ui/icons/Done'
 import Modal from '@material-ui/core/Modal'
 import Button from '@material-ui/core/Button'
+import PeopleIcon from '@material-ui/icons/People'
+import { People } from '@material-ui/icons'
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -189,6 +192,10 @@ export const JobsList = props => {
                                 return (
                                     <ListItem key={j.id}>
                                         <ListItemText primary={j.title} />
+                                        {j.users.length > 1 &&
+                                            <ListItemIcon>
+                                                <PeopleIcon />
+                                            </ListItemIcon>}
                                         <ListItemIcon>
                                             <Fab onClick={() => history.push(`/jobs/${j.id}`)} color="secondary" aria-label="edit">
                                                 <MenuOpenIcon />

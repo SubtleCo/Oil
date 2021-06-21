@@ -39,7 +39,7 @@ class JobInviteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobInvite
-        fields = ['id', 'job', 'inviter', 'invitee', 'accepted']
+        fields = ['id', 'job', 'inviter', 'invitee']
 
 
 class JobView(ViewSet):

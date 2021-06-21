@@ -17,6 +17,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import DoneIcon from '@material-ui/icons/Done';
 import { makeStyles, Typography } from '@material-ui/core'
 import Fab from '@material-ui/core/Fab'
+import PeopleIcon from '@material-ui/icons/People'
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -40,6 +42,10 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
         alignSelf: 'flex-end',
         background: theme.palette.info.light
+    },
+    shared: {
+        margin: theme.spacing(1),
+        alignSelf: 'flex-end',
     },
     pageHeader: {
         alignSelf: "center",
@@ -114,6 +120,10 @@ export const Today = props => {
                                 return (
                                     <ListItem className={priority} key={j.id}>
                                         <ListItemText primary={j.title} />
+                                        {j.users.length > 1 &&
+                                            <ListItemIcon>
+                                                <PeopleIcon />
+                                            </ListItemIcon>}
                                         <ListItemIcon onClick={handleDone} id={"job--" + j.id}>
                                             <Fab className={classes.fabs} aria-label="done">
                                                 <DoneIcon />
