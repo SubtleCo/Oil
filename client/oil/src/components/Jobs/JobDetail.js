@@ -75,15 +75,20 @@ const useStyles = makeStyles(theme => ({
     shareModal: {
         display: "flex",
         flexDirection: "column",
+        justifyContent: "space-between",
         position: 'absolute',
         top: "40vh",
-        left: "20vw",
-        width: "40vw",
+        left: "10vw",
+        width: "60vw",
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
+    friendSelect: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2)
+    }
 }))
 
 export const JobDetail = props => {
@@ -96,6 +101,7 @@ export const JobDetail = props => {
     const [modalOpen, setModalOpen] = useState(false)
     const [lastCompletedDate, setLastCompletedDate] = useState("")
     const [shareModalOpen, setShareModalOpen] = useState(false)
+    const [sharingFriend, setSharingFriend] = useState(0)
 
 
     useEffect(() => {
@@ -135,7 +141,12 @@ export const JobDetail = props => {
 
     const handleShare = () => {
         setShareModalOpen(false)
-        alert('sharing!')
+        inviteToJob(job.id, sharingFriend)
+        setSharingFriend(0)
+    }
+
+    const handleSharingFriendChange = e => {
+        setSharingFriend(parseInt(e.target.value))
     }
 
     return (
@@ -194,9 +205,10 @@ export const JobDetail = props => {
                 aria-describedby="share-modal"
             >
                 <Paper className={classes.shareModal}>Share this job with:
-                <Select variant="outlined">
+                <Select variant="outlined" className={classes.friendSelect} value={sharingFriend} onChange={handleSharingFriendChange}>
+                        <MenuItem value={0}>Pick a friend</MenuItem>
                         {
-                            confirmedFriends.map(f => <MenuItem key={f.id}>{f.first_name} {f.last_name}</MenuItem>)
+                            confirmedFriends.map(f => <MenuItem key={f.id} value={f.id}>{f.first_name} {f.last_name}</MenuItem>)
                         }
                 </Select>
                 <Button onClick={handleShare} className={`${classes.jobDetailButton} ${classes.shareButton}`}>

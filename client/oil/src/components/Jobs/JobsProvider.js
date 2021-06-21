@@ -70,7 +70,7 @@ export const JobsProvider = props => {
             method: "POST",
             headers: apiHeaders(),
             body: JSON.stringify({
-                user_2: userId
+                invitee: userId
             })
         })
     }
