@@ -3,6 +3,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { PeopleContext } from "../People/PeopleProvider"
+import { apiHeaders } from "../Settings"
 import { authApi, userIdStorageKey, userTokenStorageKey } from "./authSettings"
 import "./Login.css"
 
@@ -18,6 +19,7 @@ export const Register = () => {
     const [passwordConfirm, setPasswordConfirm] = useState("")
     const [conflictDialog, setConflictDialog] = useState(false)
     const loggedInUserId = parseInt(sessionStorage.getItem(userIdStorageKey))
+    const { getCurrentUser } = useContext(PeopleContext)
     let text = {}
 
     const history = useHistory()
@@ -25,9 +27,18 @@ export const Register = () => {
     useEffect(() => {
         // Check to see if a user is logged in (editing account) or not (adding account)
         if (loggedInUserId) {
-            return fetch(`${authApi.localApiBaseUrl}/users/${loggedInUserId}`)
+            return fetch(`${authApi.localApiBaseUrl}/users/me`, {
+                headers: apiHeaders()
+            })
                 .then(res => res.json())
-                .then(setRegisterUser)
+                .then(user => {
+                    const thisUser = {...registerUser}
+                    thisUser.firstName = user.first_name
+                    thisUser.lastName = user.last_name
+                    thisUser.username = user.username
+                    thisUser.email = user.email
+                    setRegisterUser(thisUser)
+                })
         }
     }, [loggedInUserId])
 
@@ -52,9 +63,7 @@ export const Register = () => {
     const editUser = () => {
         return fetch(`${authApi.localApiBaseUrl}/users/${loggedInUserId}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: apiHeaders(),
             body: JSON.stringify({
                 email: registerUser.email,
                 first_name: registerUser.firstName,
@@ -63,7 +72,10 @@ export const Register = () => {
                 username: registerUser.username
             })
         })
-            .then(history.push("/"))
+            .then(() => {
+                getCurrentUser()
+                history.push("/")
+            })
     }
 
     const handleRegister = (e) => {
@@ -116,7 +128,7 @@ export const Register = () => {
     // Set display text based on if this is a create or an edit session
     if (loggedInUserId) {
         text.greeting = "Changed your mind about something?"
-        text.detail = "No problem! You can change your name, email, password, or track value!"
+        text.detail = "No problem! You can change your name, email, and password."
         text.button = "Edit Account"
     } else {
         text.greeting = "Howdy, stranger!"

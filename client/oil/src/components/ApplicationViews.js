@@ -9,6 +9,7 @@ import { Today } from './Jobs/Today'
 import { PeopleProvider } from './People/PeopleProvider'
 import { PeopleSearch } from './People/PeopleSearch'
 import { PeopleList } from './People/PeopleList'
+import { Register } from './auth/Register'
 
 export const ApplicationViews = () => {
     return (
@@ -41,7 +42,8 @@ export const ApplicationViews = () => {
                     </Route>
 
                     <Route exact path="/profile">
-                        <p>Profile Edit goes here</p>
+                        {/* <p>Edit Profile</p> */}
+                        <Register />
                     </Route>
                 </PeopleProvider>
             </JobsProvider>
