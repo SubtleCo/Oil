@@ -1,7 +1,8 @@
 // Registration module
 
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
+import { PeopleContext } from "../People/PeopleProvider"
 import { authApi, userIdStorageKey, userTokenStorageKey } from "./authSettings"
 import "./Login.css"
 

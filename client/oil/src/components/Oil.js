@@ -6,31 +6,34 @@ import { Login } from './auth/Login'
 import { Register } from './auth/Register'
 import { Footer } from './Footer/Footer'
 import { Header } from './Header/Header'
+import { PeopleProvider } from './People/PeopleProvider'
 
 export const Oil = ({ theme }) => {
     return (
         <>
-            <Route render={() => {
-                if (sessionStorage.getItem(userTokenStorageKey)) {
-                    return (
-                        <>
-                            <Header />
-                            <ApplicationViews/>
-                            <Footer theme={theme}/>
-                        </>
-                    )
-                } else {
-                    return <Redirect to="/login" />;
-                }
-            }} />
+            <PeopleProvider>
+                <Route render={() => {
+                    if (sessionStorage.getItem(userTokenStorageKey)) {
+                        return (
+                            <>
+                                <Header />
+                                <ApplicationViews />
+                                <Footer theme={theme} />
+                            </>
+                        )
+                    } else {
+                        return <Redirect to="/login" />;
+                    }
+                }} />
 
-            <Route path="/login">
-                <Login />
-            </Route>
+                <Route path="/login">
+                    <Login />
+                </Route>
 
-            <Route path="/register">
-                <Register />
-            </Route>
+                <Route path="/register">
+                    <Register />
+                </Route>
+            </PeopleProvider>
         </>
     )
 }

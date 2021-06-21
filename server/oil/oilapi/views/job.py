@@ -89,8 +89,8 @@ class JobView(ViewSet):
             job = Job.objects.get(pk=pk)
 
             # Only the creator can alter the job
-            if job.created_by != user:
-                raise ValidationError("You can only edit jobs you created.")
+            if user not in job.users.all():
+                raise ValidationError("You can only edit jobs you've been invited to or you created.")
 
             req = request.data
             job_type = JobType.objects.get(pk=req['type'])
@@ -143,8 +143,8 @@ class JobView(ViewSet):
         # Make sure users are friends
         try:
             friends = UserPair.objects.get(
-                Q(user_1=user),
-                Q(user_2=user_2),
+                Q(user_1=user) & Q(user_2=user_2) |
+                Q(user_2=user) & Q(user_1=user_2),
                 Q(accepted=True)
             )
         except UserPair.DoesNotExist:

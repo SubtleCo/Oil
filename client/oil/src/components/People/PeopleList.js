@@ -35,9 +35,6 @@ const useStyles = makeStyles(theme => ({
     friendsList: {
         padding: 0,
     },
-    friendPaper: {
-        borderRadius: "5px"
-    },
     fabs: {
         margin: theme.spacing(1),
         alignSelf: 'flex-end',
@@ -203,7 +200,7 @@ export const PeopleList = props => {
             {/* Ensure the section only appears if confirmedFriends contains someone */}
             {!!confirmedFriends.length && <div>
                 <Typography align={"center"} variant={"h5"}>My Friends</Typography>
-                <Paper className={classes.friendPaper} elevation={3}>
+                <Paper elevation={3}>
                     <List className={classes.friendsList}>
                         {
                             confirmedFriends.map((f, i) => {
