@@ -1,18 +1,22 @@
+// This module is responsible for API call functions regarding people and friend invitations
+// nB. There is no "get all people" function, as users should not be browsable.
+
 import React, { createContext, useState } from 'react'
 import { apiSettings, apiHeaders } from '../Settings'
 
 export const PeopleContext = createContext()
 
 export const PeopleProvider = props => {
-    const [friends, setFriends] = useState([])
+    const [friendPairs, setFriendPairs] = useState([])
     const [foundPeople, setFoundPeople] = useState([])
 
-    const getFriends = () => {
+    // FriendPairs contain two full users, one of which will be the current user
+    const getFriendPairs = () => {
         return fetch(`${apiSettings.baseUrl}/friends`, {
             headers: apiHeaders()
         })
             .then(res => res.json())
-            .then(setFriends)
+            .then(setFriendPairs)
     }
 
     const inviteUser = id => {
@@ -37,6 +41,7 @@ export const PeopleProvider = props => {
         })
     }
 
+    // Search key will run a "contains" query on email and username, case insensitive 
     const searchPeople = key => {
         return fetch(`${apiSettings.baseUrl}/users?search=${key}`, {
             headers: apiHeaders()
@@ -51,8 +56,8 @@ export const PeopleProvider = props => {
 
     return (
         <PeopleContext.Provider value={{
-            friends,
-            getFriends,
+            friendPairs,
+            getFriendPairs,
             inviteUser,
             rejectUser,
             acceptUser,

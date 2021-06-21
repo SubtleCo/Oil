@@ -1,4 +1,8 @@
+// This module is responsible for holding all API call functions inside 
+//  "JobsContext".
+
 import React, { createContext, useState } from 'react'
+// grab the base API url as well as authenticated headers per each user
 import { apiSettings, apiHeaders } from '../Settings'
 
 export const JobsContext = createContext()

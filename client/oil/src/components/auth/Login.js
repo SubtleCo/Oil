@@ -5,8 +5,6 @@ import { Link, useHistory } from "react-router-dom";
 import { authApi, userIdStorageKey, userTokenStorageKey } from "./authSettings"
 import "./Login.css"
 
-
-
 export const Login = () => {
     const [loginUser, setLoginUser] = useState({ username: "", password: "" })
     const [BadLoginDialog, setBadLoginDialog] = useState(false)
@@ -21,6 +19,9 @@ export const Login = () => {
     }
 
     const handleLogin = (e) => {
+        // Send the username and password as a POST request the API.
+        // On successful login, the user's token and ID will be sent back
+        // The token and ID will be set in session storage
         e.preventDefault()
         return fetch(`${authApi.localApiBaseUrl}/login`, {
             method: "POST",
@@ -46,6 +47,7 @@ export const Login = () => {
 
     return (
         <main className="container--login">
+            {/* Failed login dialog box */}
             <dialog className="dialog dialog--auth" open={BadLoginDialog}>
                 <div>Your username and password don't match. Are you sure you've registered?</div>
                 <button className="button--close" onClick={e => setBadLoginDialog(false)}>Close</button>

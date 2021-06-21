@@ -1,3 +1,7 @@
+// This module is responsible for the "/jobs" view
+// A user is greeted with a list of every job they are a part of,
+//  whether they created or were invited to the job
+
 import React, { useContext, useEffect } from 'react'
 import { JobsContext } from './JobsProvider'
 import Paper from '@material-ui/core/Paper'
@@ -45,13 +49,15 @@ export const JobsList = props => {
     return (
         <>
             <div className={classes.root}>
+                {/* Header and new job button */}
                 <section className={classes.header}>
                     <h2 className="pageHeader">All My Jobs</h2>
                     <Fab onClick={() => history.push(`/jobs/create`)} className={classes.fabs}>
                         <AddIcon />
                     </Fab>
                 </section>
-                <Paper elevation={3}>
+                {/* ensure the Paper element only appears if the user has a job to list */}
+                {!!userJobs.length && <Paper elevation={3}>
                     <List>
                         {
                             userJobs.map(j => {
@@ -68,7 +74,7 @@ export const JobsList = props => {
                             })
                         }
                     </List>
-                </Paper>
+                </Paper>}
             </div>
         </>
     )

@@ -13,9 +13,6 @@ const theme = createMuiTheme({
     primary: grey,
     secondary: yellow
   },
-  overrides: {
-  }
-
 })
 
 ReactDOM.render(

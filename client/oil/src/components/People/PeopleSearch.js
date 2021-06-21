@@ -1,3 +1,7 @@
+// This module is responsible for the search bar on the "Folks" view
+//  as well as displaying the list returned on search
+// From here, users can invite friends
+
 import React, { useContext, useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper';
@@ -47,30 +51,32 @@ export const PeopleSearch = props => {
     const history = useHistory()
     const [searchKey, setSearchKey] = useState("")
     const classes = useStyles(props.theme)
-    const { searchPeople, resetSearch, foundPeople, inviteUser, getFriends } = useContext(PeopleContext)
+    const { searchPeople, resetSearch, foundPeople, inviteUser, getFriendPairs } = useContext(PeopleContext)
 
+    // handle state change of search key
     const handleSearchChange = e => {
         const newKey = e.target.value
         setSearchKey(newKey)
     }
 
+    // Send API call and reset search key
     const handleSubmit = e => {
         if (searchKey != "") {
             e.preventDefault()
             searchPeople(searchKey)
             setSearchKey("")
         }
-
     }
 
+    // Send invite, then get all friend pairs and reset the foundPeople list
     const handleInvite = e => {
         inviteUser(e.currentTarget.id)
             .then(() => {
                 resetSearch()
-                getFriends()
+                getFriendPairs()
             })
     }
-    
+
     useEffect(() => {
         resetSearch()
     }, [])
@@ -92,20 +98,21 @@ export const PeopleSearch = props => {
                     <SearchIcon />
                 </IconButton>
             </Paper>
+            {/* Only return the below Paper component if the "foundPeople" list is not empty */}
             {!!foundPeople.length && <Paper className={classes.foundList} elevation={3}>
                 <List>
                     {
                         foundPeople.map(p => {
-                                return (
-                                    <ListItem key={p.id}>
-                                        <ListItemText primary={p.first_name + ' ' + p.last_name} />
-                                        <ListItemIcon>
-                                            <Fab onClick={handleInvite} id={p.id} color="secondary" aria-label="invite">
-                                                <AddIcon />
-                                            </Fab>
-                                        </ListItemIcon>
-                                    </ListItem>
-                                )
+                            return (
+                                <ListItem key={p.id}>
+                                    <ListItemText primary={p.first_name + ' ' + p.last_name} />
+                                    <ListItemIcon>
+                                        <Fab onClick={handleInvite} id={p.id} color="secondary" aria-label="invite">
+                                            <AddIcon />
+                                        </Fab>
+                                    </ListItemIcon>
+                                </ListItem>
+                            )
                         })
                     }
                 </List>

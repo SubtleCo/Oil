@@ -1,4 +1,6 @@
-// This module is responsible for listing the detail of a job, the share functionality, and delete
+// This module is responsible for listing the detail of a job
+// This module provides buttons to share, edit, and delete a job
+
 import Paper from '@material-ui/core/Paper'
 import React, { useContext, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
@@ -79,6 +81,7 @@ export const JobDetail = props => {
     const [lastCompletedDate, setLastCompletedDate] = useState("")
 
     useEffect(() => {
+        // Grab the job id from the url parameters and set the job state
         getJobById(parseInt(jobId))
             .then(job => {
                 setJob(job)
@@ -154,9 +157,3 @@ export const JobDetail = props => {
         </>
     )
 }
-
-// List the detail
-
-// Provide a "Delete" button
-
-// Provide a "Share" button
