@@ -95,7 +95,7 @@ export const JobDetail = props => {
     const classes = useStyles(props.theme);
     const { jobId } = useParams()
     const { getJobById, deleteJob, inviteToJob } = useContext(JobsContext)
-    const { getConfirmedFriends, confirmedFriends } = useContext(PeopleContext)
+    const { getConfirmedFriends, confirmedFriends, currentUser, getCurrentUser } = useContext(PeopleContext)
     const [job, setJob] = useState({})
     const history = useHistory()
     const [modalOpen, setModalOpen] = useState(false)
@@ -116,6 +116,7 @@ export const JobDetail = props => {
                 setLastCompletedDate(niceDate)
             })
         getConfirmedFriends()
+        getCurrentUser()
     }, [])
 
     const handleModalOpen = () => {
@@ -167,7 +168,12 @@ export const JobDetail = props => {
                     <Typography className={classes.details} component="p" variant="p" align='left'>Shared with:</Typography>
                     <List>
                         {
-                            job.users?.map(user => <ListItem key={user.id}>{user.first_name} {user.last_name}</ListItem>)
+                            // Do not include the current user on the "shared with" list
+                            job.users?.map(user => {
+                                if (user.id != currentUser.id) {
+                                    return <ListItem key={user.id}>{user.first_name} {user.last_name}</ListItem>
+                                }
+                            })
                         }
                     </List>
                 </div>}
