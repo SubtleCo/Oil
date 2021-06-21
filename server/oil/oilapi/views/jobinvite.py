@@ -77,9 +77,6 @@ class JobInviteView(ViewSet):
                 Q(invitee=user),
                 Q(accepted=False)
             )
-            # job_invite.accepted = True
-            # job_invite.accepted_at = datetime.now()
-            # job_invite.save()
 
             job = job_invite.job
             job.users.add(user)
