@@ -140,9 +140,11 @@ export const JobDetail = props => {
     }
 
     const handleShare = () => {
-        setShareModalOpen(false)
-        inviteToJob(job.id, sharingFriend)
-        setSharingFriend(0)
+        if (sharingFriend !== 0) {
+            setShareModalOpen(false)
+            inviteToJob(job.id, sharingFriend)
+            setSharingFriend(0)
+        }
     }
 
     const handleSharingFriendChange = e => {
@@ -205,13 +207,13 @@ export const JobDetail = props => {
                 aria-describedby="share-modal"
             >
                 <Paper className={classes.shareModal}>Share this job with:
-                <Select variant="outlined" className={classes.friendSelect} value={sharingFriend} onChange={handleSharingFriendChange}>
+                    <Select variant="outlined" className={classes.friendSelect} value={sharingFriend} onChange={handleSharingFriendChange}>
                         <MenuItem value={0}>Pick a friend</MenuItem>
                         {
                             confirmedFriends.map(f => <MenuItem key={f.id} value={f.id}>{f.first_name} {f.last_name}</MenuItem>)
                         }
-                </Select>
-                <Button onClick={handleShare} className={`${classes.jobDetailButton} ${classes.shareButton}`}>
+                    </Select>
+                    <Button onClick={handleShare} disabled={sharingFriend == 0} className={`${classes.jobDetailButton} ${classes.shareButton}`}>
                         Share
                     </Button>
                 </Paper>
