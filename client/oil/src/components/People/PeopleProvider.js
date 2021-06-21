@@ -9,6 +9,7 @@ export const PeopleContext = createContext()
 export const PeopleProvider = props => {
     const [friendPairs, setFriendPairs] = useState([])
     const [foundPeople, setFoundPeople] = useState([])
+    const [confirmedFriends, setConfirmedFriends] = useState([])
 
     // FriendPairs contain two full users, one of which will be the current user
     const getFriendPairs = () => {
@@ -17,6 +18,15 @@ export const PeopleProvider = props => {
         })
             .then(res => res.json())
             .then(setFriendPairs)
+    }
+
+    // Get confirmed friends
+    const getConfirmedFriends = () => {
+        return fetch(`${apiSettings.baseUrl}/friends/confirmed`, {
+            headers: apiHeaders()
+        })
+            .then(res => res.json())
+            .then(setConfirmedFriends)
     }
 
     const inviteUser = id => {
@@ -63,7 +73,9 @@ export const PeopleProvider = props => {
             acceptUser,
             searchPeople,
             foundPeople,
-            resetSearch
+            resetSearch,
+            confirmedFriends,
+            getConfirmedFriends
         }}>
             {props.children}
         </PeopleContext.Provider>
