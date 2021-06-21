@@ -128,7 +128,7 @@ export const Register = () => {
     // Set display text based on if this is a create or an edit session
     if (loggedInUserId) {
         text.greeting = "Changed your mind about something?"
-        text.detail = "No problem! You can change your name, email, password, or track value!"
+        text.detail = "No problem! You can change your name, email, and password."
         text.button = "Edit Account"
     } else {
         text.greeting = "Howdy, stranger!"
