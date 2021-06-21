@@ -14,6 +14,9 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import ShareIcon from '@material-ui/icons/Share';
 import Modal from '@material-ui/core/Modal'
 import Button from '@material-ui/core/Button'
+import Select from '@material-ui/core/Select'
+import MenuItem from '@material-ui/core/MenuItem'
+import { PeopleContext } from '../People/PeopleProvider'
 
 const useStyles = makeStyles(theme => ({
     outerPaper: {
@@ -68,17 +71,38 @@ const useStyles = makeStyles(theme => ({
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
+    },
+    shareModal: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        position: 'absolute',
+        top: "40vh",
+        left: "10vw",
+        width: "60vw",
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+    friendSelect: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2)
     }
 }))
 
 export const JobDetail = props => {
     const classes = useStyles(props.theme);
     const { jobId } = useParams()
-    const { getJobById, deleteJob } = useContext(JobsContext)
+    const { getJobById, deleteJob, inviteToJob } = useContext(JobsContext)
+    const { getConfirmedFriends, confirmedFriends } = useContext(PeopleContext)
     const [job, setJob] = useState({})
     const history = useHistory()
     const [modalOpen, setModalOpen] = useState(false)
     const [lastCompletedDate, setLastCompletedDate] = useState("")
+    const [shareModalOpen, setShareModalOpen] = useState(false)
+    const [sharingFriend, setSharingFriend] = useState(0)
+
 
     useEffect(() => {
         // Grab the job id from the url parameters and set the job state
@@ -91,6 +115,7 @@ export const JobDetail = props => {
                 const niceDate = dbDate.toLocaleDateString('en-es')
                 setLastCompletedDate(niceDate)
             })
+        getConfirmedFriends()
     }, [])
 
     const handleModalOpen = () => {
@@ -104,6 +129,26 @@ export const JobDetail = props => {
     const handleDelete = () => {
         deleteJob(jobId)
         history.push("/jobs")
+    }
+
+    const handleShareButton = () => {
+        setShareModalOpen(true)
+    }
+
+    const handleShareModalClose = () => {
+        setShareModalOpen(false)
+    }
+
+    const handleShare = () => {
+        if (sharingFriend !== 0) {
+            setShareModalOpen(false)
+            inviteToJob(job.id, sharingFriend)
+            setSharingFriend(0)
+        }
+    }
+
+    const handleSharingFriendChange = e => {
+        setSharingFriend(parseInt(e.target.value))
     }
 
     return (
@@ -132,7 +177,7 @@ export const JobDetail = props => {
 
             </Paper>
             <section className={classes.jobDetailButtons}>
-                <Fab onClick={() => history.push(`/jobs/create`)} className={`${classes.jobDetailButton} ${classes.shareButton}`}>
+                <Fab onClick={handleShareButton} className={`${classes.jobDetailButton} ${classes.shareButton}`}>
                     <ShareIcon />
                 </Fab>
                 <Fab onClick={() => history.push(`/jobs/${job.id}/edit`)} className={`${classes.jobDetailButton} ${classes.editButton}`}>
@@ -151,6 +196,25 @@ export const JobDetail = props => {
                 <Paper className={classes.deleteModal}>Are you sure?
                     <Button onClick={handleDelete} className={`${classes.jobDetailButton} ${classes.deleteButton}`}>
                         Delete
+                    </Button>
+                </Paper>
+            </Modal>
+            {/* Share job modal */}
+            <Modal
+                open={shareModalOpen}
+                onClose={handleShareModalClose}
+                aria-labelledby="share-modal"
+                aria-describedby="share-modal"
+            >
+                <Paper className={classes.shareModal}>Share this job with:
+                    <Select variant="outlined" className={classes.friendSelect} value={sharingFriend} onChange={handleSharingFriendChange}>
+                        <MenuItem value={0}>Pick a friend</MenuItem>
+                        {
+                            confirmedFriends.map(f => <MenuItem key={f.id} value={f.id}>{f.first_name} {f.last_name}</MenuItem>)
+                        }
+                    </Select>
+                    <Button onClick={handleShare} disabled={sharingFriend == 0} className={`${classes.jobDetailButton} ${classes.shareButton}`}>
+                        Share
                     </Button>
                 </Paper>
             </Modal>

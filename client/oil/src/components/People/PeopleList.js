@@ -86,7 +86,7 @@ export const PeopleList = props => {
     const [awaitingFriends, setAwaitingFriends] = useState([])
     const [confirmedFriends, setConfirmedFriends] = useState([])
     const [rejectedFriendPair, setRejectedFriendPair] = useState(0)
-    const [modalOpen, setModalOpen] = useState(false)
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
     const userId = parseInt(sessionStorage.getItem(userIdStorageKey))
 
     useEffect(() => {
@@ -112,7 +112,7 @@ export const PeopleList = props => {
         // Grab the friend pair ID, then stage it for deletion in rejectedFriendPair
         const inviteId = e.currentTarget.id.split("--")[1]
         setRejectedFriendPair(parseInt(inviteId))
-        setModalOpen(true)
+        setDeleteModalOpen(true)
     }
     const handleAccept = e => {
         // Grab the friend pair ID, then send an "accepted" request
@@ -129,44 +129,17 @@ export const PeopleList = props => {
             .then(() => {
                 // Reset the staged friend pair for deletion to 0 for safety
                 setRejectedFriendPair(0)
-                setModalOpen(false)
+                setDeleteModalOpen(false)
                 getFriendPairs()
             })
     }
 
-    const handleModalClose = () => {
-        setModalOpen(false)
+    const handleDeleteModalClose = () => {
+        setDeleteModalOpen(false)
     }
 
     return (
         <div className={classes.root}>
-            {/* Ensure the section only appears if pendingFriends contains someone */}
-            {!!pendingFriends.length && <div>
-                <Typography align={"center"} variant={"h5"}>Folks you invited</Typography>
-                <Paper className={classes.friendPaper} elevation={3}>
-                    <List className={classes.friendsList}>
-                        {
-                            pendingFriends.map((f, i) => {
-                                let thisClass = `${classes.pending}`
-                                // add a border radius to top and bottom list items
-                                if (i == 0) thisClass += ` ${classes.topItem}`
-                                if (i == pendingFriends.length - 1) thisClass += ` ${classes.bottomItem}`
-                                return (
-                                    <ListItem className={thisClass} key={f.id}>
-                                        <ListItemText primary={'You invited ' + f.user_2.first_name + ' ' + f.user_2.last_name} />
-                                        {/* Delete button  */}
-                                        <ListItemIcon onClick={confirmDelete} id={"request--" + f.id}>
-                                            <Fab className={`${classes.fabs} ${classes.reject}`} id={f.id} aria-label="reject">
-                                                <ClearIcon />
-                                            </Fab>
-                                        </ListItemIcon>
-                                    </ListItem>
-                                )
-                            })
-                        }
-                    </List>
-                </Paper>
-            </div>}
             {/* Ensure the section only appears if awaitingFriends contains someone */}
             {!!awaitingFriends.length && <div>
                 <Typography align={"center"} variant={"h5"}>Your invites</Typography>
@@ -191,6 +164,33 @@ export const PeopleList = props => {
                                         <ListItemIcon onClick={handleAccept} id={"request--" + f.id}>
                                             <Fab className={`${classes.fabs} ${classes.accept}`} id={f.id} aria-label="accept">
                                                 <DoneIcon />
+                                            </Fab>
+                                        </ListItemIcon>
+                                    </ListItem>
+                                )
+                            })
+                        }
+                    </List>
+                </Paper>
+            </div>}
+            {/* Ensure the section only appears if pendingFriends contains someone */}
+            {!!pendingFriends.length && <div>
+                <Typography align={"center"} variant={"h5"}>Folks you invited</Typography>
+                <Paper className={classes.friendPaper} elevation={3}>
+                    <List className={classes.friendsList}>
+                        {
+                            pendingFriends.map((f, i) => {
+                                let thisClass = `${classes.pending}`
+                                // add a border radius to top and bottom list items
+                                if (i == 0) thisClass += ` ${classes.topItem}`
+                                if (i == pendingFriends.length - 1) thisClass += ` ${classes.bottomItem}`
+                                return (
+                                    <ListItem className={thisClass} key={f.id}>
+                                        <ListItemText primary={'You invited ' + f.user_2.first_name + ' ' + f.user_2.last_name} />
+                                        {/* Delete button  */}
+                                        <ListItemIcon onClick={confirmDelete} id={"request--" + f.id}>
+                                            <Fab className={`${classes.fabs} ${classes.reject}`} id={f.id} aria-label="reject">
+                                                <ClearIcon />
                                             </Fab>
                                         </ListItemIcon>
                                     </ListItem>
@@ -230,9 +230,10 @@ export const PeopleList = props => {
                     </List>
                 </Paper>
             </div>}
+            {/* Delete job confirmation modal */}
             <Modal
-                open={modalOpen}
-                onClose={handleModalClose}
+                open={deleteModalOpen}
+                onClose={handleDeleteModalClose}
                 aria-labelledby="delete-confirm-modal"
                 aria-describedby="delete-confirm-modal"
             >

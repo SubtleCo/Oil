@@ -110,4 +110,26 @@ class UserPairView(ViewSet):
                 return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    
+    # Return a list of the user's confirmed friends only
+    @action(methods=['get'], detail=False)
+    def confirmed(self, request):
+        if request.method == "GET":
+            user = request.auth.user
+
+            user_pairs = UserPair.objects.filter(
+                Q(user_1=user) | Q(user_2=user),
+                Q(accepted=True)
+                )
             
+            friends = []
+            for pair in user_pairs:
+                if pair.user_1 == user:
+                    friends.append(pair.user_2)
+                else:
+                    friends.append(pair.user_1)
+            serializer = UserSerializer(friends, many=True, context={'request': request})
+            return Response(serializer.data)
+
+        else:
+            return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)

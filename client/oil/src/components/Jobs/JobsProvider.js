@@ -65,6 +65,30 @@ export const JobsProvider = props => {
         })
     }
 
+    const inviteToJob = (jobId, userId) => {
+        return fetch(`${apiSettings.baseUrl}/jobs/${jobId}/share`, {
+            method: "POST",
+            headers: apiHeaders(),
+            body: JSON.stringify({
+                invitee: userId
+            })
+        })
+    }
+
+    const acceptJob = jobInviteId => {
+        return fetch(`${apiSettings.baseUrl}/shared/${jobInviteId}`, {
+            method: "PUT",
+            headers: apiHeaders()
+        })
+    }
+
+    const rejectJob = jobInviteId => {
+        return fetch(`${apiSettings.baseUrl}/shared/${jobInviteId}`, {
+            method: "DELETE",
+            headers: apiHeaders()
+        })
+    }
+
     return <JobsContext.Provider value={{
         userJobs,
         getAllUserJobs,
@@ -74,7 +98,10 @@ export const JobsProvider = props => {
         deleteJob,
         jobTypes,
         getJobTypes,
-        completeJob
+        completeJob,
+        inviteToJob,
+        acceptJob,
+        rejectJob
     }}>
         {props.children}
     </JobsContext.Provider>

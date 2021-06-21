@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 export const JobsList = props => {
     const history = useHistory()
-    const { userJobs, getAllUserJobs } = useContext(JobsContext)
+    const { userJobs, getAllUserJobs, acceptJob, rejectJob } = useContext(JobsContext)
     const classes = useStyles()
 
     useEffect(() => {
