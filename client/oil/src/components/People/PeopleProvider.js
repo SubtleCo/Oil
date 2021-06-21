@@ -53,7 +53,7 @@ export const PeopleProvider = props => {
         })
     }
 
-    // id here is the user_pair object id, not a user id /friends/pk/accept
+    // id here is the user_pair object id, not a user id
     const acceptUser = id => {
         return fetch(`${apiSettings.baseUrl}/friends/${id}/accept`, {
             headers: apiHeaders()
