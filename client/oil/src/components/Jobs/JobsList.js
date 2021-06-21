@@ -18,6 +18,8 @@ import Fab from '@material-ui/core/Fab'
 import { userIdStorageKey } from '../auth/authSettings'
 import ClearIcon from '@material-ui/icons/Clear'
 import DoneIcon from '@material-ui/icons/Done'
+import Modal from '@material-ui/core/Modal'
+import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,6 +53,21 @@ const useStyles = makeStyles(theme => ({
     reject: {
         background: theme.palette.error.light
     },
+    rejectConfirmModal: {
+        display: "flex",
+        position: 'absolute',
+        top: "40vh",
+        left: "20vw",
+        width: "40vw",
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+    rejectConfirmButton: {
+        marginLeft: "20px",
+        background: theme.palette.error.light
+    },
 }))
 
 export const JobsList = props => {
@@ -65,6 +82,8 @@ export const JobsList = props => {
     const [invitedTo, setInvitedTo] = useState([])
     const classes = useStyles()
     const userId = parseInt(sessionStorage.getItem(userIdStorageKey))
+    const [rejectModalOpen, setRejectModalOpen] = useState(false)
+    const [rejectedJobInvite, setRejectedJobInvite] = useState(0)
 
     useEffect(() => {
         getAllUserJobs()
@@ -75,15 +94,33 @@ export const JobsList = props => {
         if (!!userJobInvites.length) {
             const jobInvites = userJobInvites.filter(ji => ji.invitee.id == userId)
             setInvitedTo(jobInvites)
+        } else {
+            setInvitedTo([])
         }
     }, [userJobInvites])
 
-    const confirmReject = () => {
+    const confirmReject = e => {
+        // Grab the job invite ID, then stage it for deletion in rejectedJobInvite
+        const inviteId = e.currentTarget.id.split("--")[1]
+        setRejectedJobInvite(parseInt(inviteId))
+        setRejectModalOpen(true)
+    }
 
+    const handleReject = () => {
+        rejectJob(rejectedJobInvite)
+            .then(() => {
+                setRejectModalOpen(false)
+                setRejectedJobInvite(0)
+                getUserJobInvites()
+            })
     }
 
     const handleAccept = () => {
 
+    }
+
+    const handleRejectModalClose = () => {
+        setRejectModalOpen(false)
     }
 
     return (
@@ -144,6 +181,19 @@ export const JobsList = props => {
                     </List>
                 </Paper>}
             </div>
+            {/* Reject job confirmation modal */}
+            <Modal
+                open={rejectModalOpen}
+                onClose={handleRejectModalClose}
+                aria-labelledby="delete-confirm-modal"
+                aria-describedby="delete-confirm-modal"
+            >
+                <Paper className={classes.rejectConfirmModal}>Are you sure?
+                    <Button onClick={handleReject} className={classes.rejectConfirmButton}>
+                        Reject
+                    </Button>
+                </Paper>
+            </Modal>
         </>
     )
 }
