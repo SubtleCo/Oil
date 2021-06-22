@@ -13,6 +13,8 @@ Authenticated users will create jobs consisting of:
 
 From then on, whenever a user logs on, they will be greeted with a list of jobs that need to be done. Simple as that! A user can then mark the job as completed from the main view once they're done.
 
+Users can search for other users, become friends, and then share job responsibilities with each other. You gave the dog their meds? Great! Now it's marked out on both of our lists!
+
 This app was absolutely born out of personal necessity. I've always been bad at following a manufactured's recommended maintenance, or remembering when the last time I changed the air filter was. This app is meant to be the ultimate set-and-forget reminders app for those things that you feel like it's about time to do, but no one really knows.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and [Django](https://www.djangoproject.com).
@@ -20,18 +22,15 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 [Project Proposal](https://docs.google.com/document/d/1M-ca4kgNt_PwUpoWO7nD-wDve2ZKk1Ua0C4cONlftiA)
 
 ### Features
-___
-#### Authorized users can:
 
-* Generate dynamic reports based on artist count and listening period
-* Alter the "potential revenue" base pay (CD, LP, bandcamp, "champion of music")
-* Save a report as a donation plan, either as "paid" or "save for later"
-* View a list of all plans, saved or unsaved
-* View a saved plan, or mark it as unpaid
-* View, edit, or delete an unsaved plan, or mark it as paid
-* Set a default streaming service
-* Set a default value of music (CD, LP, bandcamp, champion of music)
+- Authorized users can create, edit, and remove jobs from their profile
+- Authorized users can search for other users via email or username to add as a friend
+- Confirmed friends can invite each other to share jobs
+- When a user marks a job as complete, the job is updated with a "last completed" date of day, and "last completed by" becomes that user
+- If users are sharing a job, marking the job as complete updates that job for everyone
 
+#### Today View
+- Jobs 
 
 ### Background
 
