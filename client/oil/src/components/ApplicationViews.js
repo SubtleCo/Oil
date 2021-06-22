@@ -10,12 +10,17 @@ import { PeopleProvider } from './People/PeopleProvider'
 import { PeopleSearch } from './People/PeopleSearch'
 import { PeopleList } from './People/PeopleList'
 import { Register } from './auth/Register'
+import { Header } from './Header/Header'
+import { Footer } from './Footer/Footer'
 
-export const ApplicationViews = () => {
+export const ApplicationViews = props => {
     return (
         <>
             <JobsProvider>
                 <PeopleProvider>
+
+                    <Header />
+
                     <Route exact path="/">
                         <Today />
                     </Route>
@@ -41,10 +46,13 @@ export const ApplicationViews = () => {
                         <PeopleList />
                     </Route>
 
+                    {/*Edit Profile*/}
                     <Route exact path="/profile">
-                        {/* <p>Edit Profile</p> */}
                         <Register />
                     </Route>
+
+                    <Footer theme={props.theme} />
+
                 </PeopleProvider>
             </JobsProvider>
         </>
