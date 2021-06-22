@@ -11,7 +11,8 @@ import json
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """JSON serializer for Users"""
+    """Simple JSON serializer for User to protect sensative data"""
+
     class Meta:
         model = User
         fields = ['id', 'first_name', 'last_name', 'username', 'email']
@@ -28,6 +29,7 @@ class UserView(ViewSet):
                 users = User.objects.filter(
                     Q(email__icontains=key) |
                     Q(username__icontains=key),
+                    # Prevent the current user from appearing in the search
                     ~Q(id=user.id)
                 )
                 serializer = UserSerializer(
@@ -37,6 +39,7 @@ class UserView(ViewSet):
                 return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
 
     def update(self, request, pk=None):
+        # Allows a user to edit their name, username, email and password
         user = request.auth.user
         if user.id != int(pk):
             return Response("You cannot edit a user account that is not your own", status=status.HTTP_401_UNAUTHORIZED)
@@ -44,6 +47,7 @@ class UserView(ViewSet):
         req = request.data
         try:
             edit_user = User.objects.get(pk=user.id)
+            # Use the build in Django "set_password" method to ensure password hashing
             edit_user.set_password(req['password'])
             edit_user.username = req['username']
             edit_user.email = req['email']
@@ -55,7 +59,7 @@ class UserView(ViewSet):
         except User.DoesNotExist:
             return Response("You cannot edit a user account that is not your own", status=status.HTTP_401_UNAUTHORIZED)
 
-    # Get current user
+    # Get current user based on auth token
     @action(methods=['get'], detail=False)
     def me(self, request):
         user = request.auth.user

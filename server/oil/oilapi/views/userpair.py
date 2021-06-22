@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'last_name']
 
 class UserPairSerializer(serializers.ModelSerializer):
-    """JSON serializer for Jobs"""
+    """JSON serializer for UserPairs"""
     user_1 = UserSerializer(many=False)
     user_2 = UserSerializer(many=False)
 
@@ -123,6 +123,7 @@ class UserPairView(ViewSet):
                 )
             
             friends = []
+            # Choose the user of the pair that is NOT the current user to add to the friends list
             for pair in user_pairs:
                 if pair.user_1 == user:
                     friends.append(pair.user_2)
