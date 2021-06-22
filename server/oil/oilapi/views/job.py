@@ -43,6 +43,8 @@ class JobInviteSerializer(serializers.ModelSerializer):
 
 
 class JobView(ViewSet):
+    # Create a job, set "last completed" to now if unspecified
+    # Assigns current user as the "created_by" user
     def create(self, request):
         user = request.auth.user
 
@@ -65,14 +67,22 @@ class JobView(ViewSet):
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
+    # Retrieve a single job for the purposes of job detail and editing
     def retrieve(self, request, pk=None):
+        user = request.auth.user
         try:
             job = Job.objects.get(pk=pk)
+
+            # Only users attached to the job can view the detail
+            if user not in job.users.all():
+                raise ValidationError("You can only view jobs you've been invited to or you created.")
+
             serializer = JobSerializer(job, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
 
+    # Return a list of all jobs a user is attached to
     def list(self, request):
         user = request.auth.user
 
@@ -82,13 +92,14 @@ class JobView(ViewSet):
             jobs, many=True, context={'request': request})
         return Response(serializer.data)
 
+    # Allows a user to edit a job if they are attached to it
     def update(self, request, pk=None):
         user = request.auth.user
 
         try:
             job = Job.objects.get(pk=pk)
 
-            # Only the creator can alter the job
+            # Only attached users can alter the job
             if user not in job.users.all():
                 raise ValidationError("You can only edit jobs you've been invited to or you created.")
 
@@ -108,6 +119,7 @@ class JobView(ViewSet):
         except ValidationError as ex:
             return Response({"reason": ex.args[0]}, status=status.HTTP_401_UNAUTHORIZED)
 
+    # Delete a job, including a "soft delete" in which the user is removed from the job if other users are attached
     def destroy(self, request, pk=None):
         user = request.auth.user
 
@@ -117,7 +129,13 @@ class JobView(ViewSet):
             # Only the creator can delete the job
             if job.created_by != user:
                 raise ValidationError("You can only delete jobs you created.")
-            job.delete()
+
+            # Remove the user from the job    
+            job.users.remove(user)
+
+            # Delete the job if all users have been removed
+            if len(job.users.all()) < 1:
+                job.delete()    
             return Response(None, status=status.HTTP_204_NO_CONTENT)
 
         except Job.DoesNotExist as ex:
