@@ -129,9 +129,9 @@ class JobView(ViewSet):
         try:
             job = Job.objects.get(pk=pk)
 
-            # Only the creator can delete the job
-            if job.created_by != user:
-                raise ValidationError("You can only delete jobs you created.")
+            # Only a user attached to the job can remove or delete the job.
+            if user not in job.users.all():
+                raise ValidationError("You can only delete jobs you are subscribed to.")
 
             # Remove the user from the job    
             job.users.remove(user)
