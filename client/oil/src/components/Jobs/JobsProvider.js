@@ -42,7 +42,6 @@ export const JobsProvider = props => {
             headers: apiHeaders(),
             body: JSON.stringify(newJob)
         })
-            .then(res => res.json())
     }
 
     const deleteJob = id => {

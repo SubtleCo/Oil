@@ -79,10 +79,15 @@ export const JobForm = props => {
         e.preventDefault()
         if (jobId) {
             editJob(formJob)
+                .then(() => {
+                    history.push("/jobs")
+                })
         } else {
             createJob(formJob)
+                .then(() => {
+                    history.push("/jobs")
+                })
         }
-        history.push("/jobs")
     }
 
     return (
