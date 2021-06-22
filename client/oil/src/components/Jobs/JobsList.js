@@ -171,7 +171,7 @@ export const JobsList = props => {
                                     if (i == invitedTo.length - 1) thisClass += ` ${classes.bottomItem}`
                                     return (
                                         <ListItem key={jobInvite.id} className={thisClass}>
-                                            <ListItemText primary={jobInvite.job.title} />
+                                            <ListItemText primary={`${jobInvite.job.title} (from ${jobInvite.inviter.first_name} ${jobInvite.inviter.last_name})`} />
                                             <ListItemIcon onClick={confirmReject} id={"request--" + jobInvite.id}>
                                                 <Fab className={`${classes.fabs} ${classes.reject}`} id={jobInvite.id} aria-label="reject">
                                                     <ClearIcon />
