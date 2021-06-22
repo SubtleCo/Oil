@@ -43,9 +43,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 When did I change the air filter? Did I already water the fern this week? How long has this gas been sitting in the mower? To be honest, I don't know the answer to any of these, but from here on out, I will. As I've grown older and taken on more responsibilities, I've struggled with how to keep track of these things. Calendar reminders won't let you mark something as completed, post-it notes get lost, and other apps can be overwhelming with features and possibilities. I wanted to build something that was absolutely nothing more than a recurring virtual task list. Given that we haven't figured out how to make a little spiral notebook that creates your checklist for you, I present: Oil
 
-## Visual Sample
+## Visual Samples
 
-xxx
+<img src="./images/Today.png" alt="logo" width="300" />
+<img src="./images/Jobs.png" alt="logo" width="300" />
+<img src="./images/Friends.png" alt="logo" width="300" />
+
+## GIF Demo
+<img src="./images/Demo.gif" alt="Demo" />
 
 ## Installation
 
