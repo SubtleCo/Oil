@@ -69,7 +69,7 @@ const useStyles = makeStyles(theme => ({
         borderBottomRightRadius: 5,
     },
     noJobs: {
-        marginTop: "50%",
+        marginTop: "20vh",
         textAlign: "center"
     }
 }))

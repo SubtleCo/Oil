@@ -11,7 +11,13 @@ import { Oil } from './components/Oil';
 const theme = createMuiTheme({
   palette: {
     primary: grey,
-    secondary: yellow
+    // secondary: yellow
+    secondary: {
+      light: '#FFEE60',
+      main: '#FAC141',
+      dark: 'FFB42B',
+      contrastText: '#000'
+    }
   },
 })
 

@@ -83,7 +83,7 @@ export const PeopleSearch = props => {
 
     return (
         <>
-            <Typography align="center" className={classes.searchLabel}>Find a friend</Typography>
+            <Typography align={"center"} variant={"h5"} className={classes.searchLabel}>Find a friend</Typography>
             <Paper component="form" className={classes.root}>
                 <InputBase
                     className={classes.input}

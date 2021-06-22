@@ -42,7 +42,12 @@ const useStyles = makeStyles(theme => ({
     },
     header: {
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    hiddenDiv: {
+        margin: theme.spacing(1),
+        width: "56px"
     },
     invited: {
         background: theme.palette.info.light
@@ -147,7 +152,8 @@ export const JobsList = props => {
             <div className={classes.root}>
                 {/* Header and new job button */}
                 <section className={classes.header}>
-                    <h2 className="pageHeader">All My Jobs</h2>
+                    <div className={classes.hiddenDiv}></div>
+                    <Typography variant={'h5'} align={'center'} className={classes.headerText}>All My Jobs</Typography>
                     <Fab onClick={() => history.push(`/jobs/create`)} className={classes.fabs}>
                         <AddIcon />
                     </Fab>
