@@ -47,8 +47,10 @@ When did I change the air filter? Did I already water the fern this week? How lo
 
 ### Today
 <img src="./images/Today.png" alt="logo" width="300" />
+
 ### Jobs
 <img src="./images/Jobs.png" alt="logo" width="300" />
+
 ### Friends
 <img src="./images/Friends.png" alt="logo" width="300" />
 
