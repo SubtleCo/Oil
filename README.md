@@ -1,6 +1,6 @@
 # Oil
 
-![Logo](./images/logo.png)
+<img src="./images/logo.png" alt="logo" width="200"/>
 
 ## Description
 
