@@ -18,7 +18,8 @@ class ShortJobSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """JSON serializer for user, names only"""
+    """Simple JSON serializer for User to protect sensative data"""
+
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name']
@@ -79,6 +80,8 @@ class JobInviteView(ViewSet):
 
             job = job_invite.job
             job.users.add(user)
+
+            # Delete the job invite after the user has been added to the job
             job_invite.delete()
             return Response(None, status=status.HTTP_204_NO_CONTENT)
         except JobInvite.DoesNotExist as ex:

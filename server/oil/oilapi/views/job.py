@@ -10,15 +10,18 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
-    """JSON serializer for user, names only"""
+    """Simple JSON serializer for User to protect sensative data"""
+
     class Meta:
         model = User
         fields = ['id', 'username', 'first_name', 'last_name']
 
 class JobSerializer(serializers.ModelSerializer):
     """JSON serializer for Jobs"""
+
     users = UserSerializer(many=True)
     last_completed_by = UserSerializer(many=False)
+    
     class Meta:
         model = Job
         fields = ['id', 'title', 'description', 'type', 'frequency', 'created_at',
@@ -146,7 +149,8 @@ class JobView(ViewSet):
 
 ################################  Job Sharing Logic  ################################
 
-    @action(methods=['post', 'delete'], detail=True)
+    # API request to /jobs/pk/share
+    @action(methods=['post'], detail=True)
     def share(self, request, pk=None):
         req = request.data
         user = request.auth.user
@@ -195,6 +199,9 @@ class JobView(ViewSet):
             except ValidationError as ex:
                 return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
+        else:
+            return Response(None, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
     # Mark a job as newly completed
     @action(methods=['GET'], detail=True)
     def complete(self, request, pk=None):
@@ -207,8 +214,8 @@ class JobView(ViewSet):
             return Response(ex.args[0], status=status.HTTP_404_NOT_FOUND)
 
         # Make sure the user is authorized to complete the job
-        # if user not in job.users:
-        #     return Response("You cannont complete a job you are not subscribed to", status=status.HTTP_401_UNAUTHORIZED)
+        if user not in job.users.all():
+            return Response("You cannont complete a job you are not subscribed to", status=status.HTTP_401_UNAUTHORIZED)
 
         job.last_completed_by = user
         job.last_completed = date.today()

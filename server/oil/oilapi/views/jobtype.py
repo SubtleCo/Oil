@@ -8,7 +8,7 @@ from oilapi.models import Job, JobType
 from datetime import date
 
 class JobTypeSerializer(serializers.ModelSerializer):
-    """JSON serializer for Jobs"""
+    """JSON serializer for JobTypes"""
     class Meta:
         model = JobType
         fields = ['id', 'title']
@@ -35,7 +35,7 @@ class JobTypeView(ViewSet):
         try:
             job_type = JobType.objects.get(pk=pk)
 
-            # Only the creator can delete the job
+            # Only the creator can delete the job type
             if job_type.created_by != user:
                 raise ValidationError("You can only delete job types you created.")
             job_type.delete()
