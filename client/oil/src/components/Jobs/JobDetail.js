@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     outerPaper: {
         width: "90%",
         margin: "auto",
-        marginTop: "20%",
+        marginTop: "20vh",
         padding: "0.5em",
         display: "flex",
         flexDirection: "column"

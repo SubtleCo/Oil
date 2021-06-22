@@ -4,6 +4,7 @@
 import { makeStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import React from 'react'
+import Logo from '../../images/Logo.png'
 
 const useStyles = makeStyles(theme => (
     {
@@ -20,8 +21,15 @@ const useStyles = makeStyles(theme => (
             flexDirection: "column",
             alignItems: "center",
             paddingTop: "2vh",
-            fontFamily: "roboto",
+            fontFamily: "Roboto",
             zIndex: 2
+        },
+        title: {
+            fontFamily: "PoiretOne"
+        },
+        logo: {
+            width: "20%",
+            maxWidth: "100px"
         }
     }
 ))
@@ -38,7 +46,7 @@ export const Header = props => {
 
     return (
         <section className={classes.root}>
-            <Typography component="h4" variant="h4" align='center'>Oil</Typography>
+            <img className={classes.logo} src={Logo}/>
             <p className={classes.date}>{niceDate}</p>
         </section>
     )
