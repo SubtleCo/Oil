@@ -50,7 +50,7 @@ When did I change the air filter? Did I already water the fern this week? How lo
 <img src="./images/Friends.png" alt="logo" width="300" />
 
 ## GIF Demo
-<img src="./images/Demo.gif" alt="Demo" />
+<img src="./images/Demo.GIF" alt="Demo" />
 
 ## Installation
 
