@@ -2,6 +2,8 @@
 
 <img src="./images/logo.png" alt="logo" width="200"/>
 
+## [Server](https://github.com/SubtleCo/oil-server)
+
 ## Description
 
 Oil is a full stack, mobile-first web application that reminds the user about long term maintenance commitments, such as watering a plant, oiling a lawnmower, cleaning out a fish tank, etc.
