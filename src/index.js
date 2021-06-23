@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import '@fontsource/roboto';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-import { yellow, grey } from '@material-ui/core/colors';
+import { grey } from '@material-ui/core/colors';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { Oil } from './components/Oil';
@@ -11,7 +11,6 @@ import { Oil } from './components/Oil';
 const theme = createMuiTheme({
   palette: {
     primary: grey,
-    // secondary: yellow
     secondary: {
       light: '#FFEE60',
       main: '#FAC141',
