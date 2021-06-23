@@ -2,7 +2,7 @@
 
 <img src="./images/logo.png" alt="logo" width="200"/>
 
-## [Server](https://github.com/SubtleCo/oil-server)
+### [Server](https://github.com/SubtleCo/oil-server)
 
 ## Description
 
