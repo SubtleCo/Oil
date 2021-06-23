@@ -75,7 +75,7 @@ When did I change the air filter? Did I already water the fern this week? How lo
 3. run `npm install` to install dependencies
 4. run `npm start` to launch the react app
 
-### Instructions for Use - Server
+### Instructions for Use - [Server](https://github.com/SubtleCo/oil-server)
 1. Make a copy of the `.env.example` file in the directory `Oil/server/oil/oil` and remove the .example extension.
 2. Acquire an secret key for Django by running the following command:
 `python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'`
