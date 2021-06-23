@@ -1,8 +1,7 @@
 // Login module
 
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import { Link, useHistory } from "react-router-dom";
-import { PeopleContext } from "../People/PeopleProvider";
 import { authApi, userIdStorageKey, userTokenStorageKey } from "./authSettings"
 import "./Login.css"
 
