@@ -2,6 +2,9 @@
 
 <img src="./images/logo.png" alt="logo" width="200"/>
 
+### [Visit the deployed site](https://oil-client.netlify.app)
+As a mobile first app, it looks best on a phone!
+
 ### [Server](https://github.com/SubtleCo/oil-server)
 
 ## Description
