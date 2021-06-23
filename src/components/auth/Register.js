@@ -1,8 +1,7 @@
 // Registration module
 
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { PeopleContext } from "../People/PeopleProvider"
 import { apiHeaders } from "../Settings"
 import { authApi, userIdStorageKey, userTokenStorageKey } from "./authSettings"
 import "./Login.css"
@@ -39,6 +38,7 @@ export const Register = () => {
                     setRegisterUser(thisUser)
                 })
         }
+        // eslint-disable-next-line
     }, [loggedInUserId])
 
     // Keep track of user input

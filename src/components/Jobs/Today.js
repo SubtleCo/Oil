@@ -87,6 +87,7 @@ export const Today = props => {
 
     useEffect(() => {
         getAllUserJobs()
+        // eslint-disable-next-line
     }, [])
 
     // Filter all user jobs to only include those due
@@ -114,8 +115,8 @@ export const Today = props => {
                                 if (j.days_lapsed > 2) priority = classes.medPriority
                                 if (j.days_lapsed > 6) priority = classes.highPriority
                                 // Add border radius to top and bottom items
-                                if (i == 0) priority = `${priority} ${classes.topItem}`
-                                if (i == dueJobs.length - 1) priority = `${priority} ${classes.bottomItem}`
+                                if (i === 0) priority = `${priority} ${classes.topItem}`
+                                if (i === dueJobs.length - 1) priority = `${priority} ${classes.bottomItem}`
 
                                 return (
                                     <ListItem className={priority} key={j.id}>
@@ -136,7 +137,7 @@ export const Today = props => {
                     </List>
                 </Paper>}
                 {/* If there are no jobs to do, show the logo (or at least some text) */}
-                {dueJobs.length == 0 &&
+                {dueJobs.length === 0 &&
                     <div className={classes.noJobs}>
                         <Typography >Sheesh, you're good.</Typography>
                         <Typography >No jobs here!</Typography>

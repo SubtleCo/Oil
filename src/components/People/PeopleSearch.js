@@ -17,7 +17,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add';
-import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -48,7 +47,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const PeopleSearch = props => {
-    const history = useHistory()
     const [searchKey, setSearchKey] = useState("")
     const classes = useStyles(props.theme)
     const { searchPeople, resetSearch, foundPeople, inviteUser, getFriendPairs } = useContext(PeopleContext)
@@ -61,7 +59,7 @@ export const PeopleSearch = props => {
 
     // Send API call and reset search key
     const handleSubmit = e => {
-        if (searchKey != "") {
+        if (searchKey !== "") {
             e.preventDefault()
             searchPeople(searchKey)
             setSearchKey("")
@@ -79,6 +77,7 @@ export const PeopleSearch = props => {
 
     useEffect(() => {
         resetSearch()
+        // eslint-disable-next-line
     }, [])
 
     return (

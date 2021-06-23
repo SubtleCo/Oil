@@ -1,7 +1,6 @@
 // This module is responsible for rendering a form for the user to create/edit a job
 
 import React, { useContext, useEffect, useState } from 'react'
-import { userIdStorageKey } from '../auth/authSettings'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Paper from '@material-ui/core/Paper'
@@ -40,7 +39,6 @@ export const JobForm = props => {
     const { createJob, getJobById, editJob, getJobTypes, jobTypes } = useContext(JobsContext)
     const { jobId } = useParams()
     const classes = useStyles(props.theme);
-    const userId = parseInt(sessionStorage.getItem(userIdStorageKey))
     const history = useHistory()
     const [formJob, setFormJob] = useState({
         title: "",
@@ -63,6 +61,7 @@ export const JobForm = props => {
                     setFormJob(editJob)
                 })
         }
+        // eslint-disable-next-line
     }, [jobId])
 
     // Duplicate, alter, and set form state

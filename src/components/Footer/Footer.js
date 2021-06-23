@@ -60,8 +60,10 @@ export const Footer = ({ theme }) => {
         setAnchorEl(null)
     }
 
+
     useEffect(() => {
         getCurrentUser()
+        // eslint-disable-next-line
     }, [])
 
     return (

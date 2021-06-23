@@ -88,21 +88,23 @@ export const PeopleList = props => {
 
     useEffect(() => {
         getFriendPairs()
+        // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
         // Filter friend pairs in which the user has invited someone and is waiting
         setPendingFriends(friendPairs.filter(pair => {
-            return pair.accepted == false && pair.user_1.id == userId
+            return pair.accepted === false && pair.user_1.id === userId
         }))
         // Filter friend pairs in which the user needs to respond to an invitation
         setAwaitingFriends(friendPairs.filter(pair => {
-            return pair.accepted == false && pair.user_2.id == userId
+            return pair.accepted === false && pair.user_2.id === userId
         }))
         // Filter friend pairs in which the pair is confirmed friends
         setConfirmedFriends(friendPairs.filter(pair => {
-            return pair.accepted == true
+            return pair.accepted === true
         }))
+        // eslint-disable-next-line
     }, [friendPairs])
 
     const confirmDelete = e => {
@@ -146,8 +148,8 @@ export const PeopleList = props => {
                             awaitingFriends.map((f, i) => {
                                 let thisClass = `${classes.awaiting}`
                                 // add a border radius to top and bottom list items
-                                if (i == 0) thisClass += ` ${classes.topItem}`
-                                if (i == awaitingFriends.length - 1) thisClass += ` ${classes.bottomItem}`
+                                if (i === 0) thisClass += ` ${classes.topItem}`
+                                if (i === awaitingFriends.length - 1) thisClass += ` ${classes.bottomItem}`
                                 return (
                                     <ListItem className={thisClass} key={f.id}>
                                         <ListItemText primary={f.user_1.first_name + ' ' + f.user_1.last_name + ' invited you'} />
@@ -179,8 +181,8 @@ export const PeopleList = props => {
                             pendingFriends.map((f, i) => {
                                 let thisClass = `${classes.pending}`
                                 // add a border radius to top and bottom list items
-                                if (i == 0) thisClass += ` ${classes.topItem}`
-                                if (i == pendingFriends.length - 1) thisClass += ` ${classes.bottomItem}`
+                                if (i === 0) thisClass += ` ${classes.topItem}`
+                                if (i === pendingFriends.length - 1) thisClass += ` ${classes.bottomItem}`
                                 return (
                                     <ListItem className={thisClass} key={f.id}>
                                         <ListItemText primary={'You invited ' + f.user_2.first_name + ' ' + f.user_2.last_name} />
@@ -206,8 +208,8 @@ export const PeopleList = props => {
                             confirmedFriends.map((f, i) => {
                                 let thisClass = `${classes.confirmed}`
                                 // add a border radius to top and bottom list items
-                                if (i == 0) thisClass += ` ${classes.topItem}`
-                                if (i == confirmedFriends.length - 1) thisClass += ` ${classes.bottomItem}`
+                                if (i === 0) thisClass += ` ${classes.topItem}`
+                                if (i === confirmedFriends.length - 1) thisClass += ` ${classes.bottomItem}`
                                 // Assign friend to the non-current user of the user_pair
                                 let friend = f.user_1
                                 if (f.user_1.id === userId) friend = f.user_2
