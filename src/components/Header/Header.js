@@ -46,7 +46,7 @@ export const Header = props => {
 
     return (
         <section className={classes.root}>
-            <img className={classes.logo} src={Logo}/>
+            <img className={classes.logo} src={Logo} alt="Verbose logo for Oil"/>
             <p className={classes.date}>{niceDate}</p>
         </section>
     )
