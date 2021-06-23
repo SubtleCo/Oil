@@ -19,7 +19,6 @@ export const Register = () => {
     const [passwordConfirm, setPasswordConfirm] = useState("")
     const [conflictDialog, setConflictDialog] = useState(false)
     const loggedInUserId = parseInt(sessionStorage.getItem(userIdStorageKey))
-    const { getCurrentUser } = useContext(PeopleContext)
     let text = {}
 
     const history = useHistory()
@@ -73,7 +72,6 @@ export const Register = () => {
             })
         })
             .then(() => {
-                getCurrentUser()
                 history.push("/")
             })
     }
