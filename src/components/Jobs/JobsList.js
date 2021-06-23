@@ -21,7 +21,6 @@ import DoneIcon from '@material-ui/icons/Done'
 import Modal from '@material-ui/core/Modal'
 import Button from '@material-ui/core/Button'
 import PeopleIcon from '@material-ui/icons/People'
-import { People } from '@material-ui/icons'
 
 
 const useStyles = makeStyles(theme => ({
@@ -107,16 +106,17 @@ export const JobsList = props => {
     useEffect(() => {
         getAllUserJobs()
         getUserJobInvites()
+        // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
         if (!!userJobInvites.length) {
-            const jobInvites = userJobInvites.filter(ji => ji.invitee.id == userId)
+            const jobInvites = userJobInvites.filter(ji => ji.invitee.id === userId)
             setInvitedTo(jobInvites)
         } else {
             setInvitedTo([])
         }
-    }, [userJobInvites])
+    }, [userJobInvites, userId])
 
     const confirmReject = e => {
         // Grab the job invite ID, then stage it for deletion in rejectedJobInvite
@@ -167,8 +167,8 @@ export const JobsList = props => {
                                 invitedTo.map((jobInvite, i) => {
                                     let thisClass = `${classes.invited}`
                                     // add a border radius to top and bottom list items
-                                    if (i == 0) thisClass += ` ${classes.topItem}`
-                                    if (i == invitedTo.length - 1) thisClass += ` ${classes.bottomItem}`
+                                    if (i === 0) thisClass += ` ${classes.topItem}`
+                                    if (i === invitedTo.length - 1) thisClass += ` ${classes.bottomItem}`
                                     return (
                                         <ListItem key={jobInvite.id} className={thisClass}>
                                             <ListItemText primary={`${jobInvite.job.title} (from ${jobInvite.inviter.first_name} ${jobInvite.inviter.last_name})`} />

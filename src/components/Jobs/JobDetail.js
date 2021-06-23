@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     outerPaper: {
         width: "90%",
         margin: "auto",
-        marginTop: "20vh",
+        marginTop: "5vh",
         padding: "0.5em",
         display: "flex",
         flexDirection: "column"
@@ -118,6 +118,7 @@ export const JobDetail = props => {
                 setLastCompletedDate(niceDate)
             })
         getConfirmedFriends()
+        // eslint-disable-next-line
     }, [])
 
     const handleModalOpen = () => {
@@ -171,9 +172,9 @@ export const JobDetail = props => {
                         {
                             // Do not include the current user on the "shared with" list
                             job.users?.map(user => {
-                                if (user.id != userId) {
+                                if (user.id !== userId) {
                                     return <ListItem key={user.id}>{user.first_name} {user.last_name}</ListItem>
-                                }
+                                } else return ""
                             })
                         }
                     </List>
@@ -220,7 +221,7 @@ export const JobDetail = props => {
                             confirmedFriends.map(f => <MenuItem key={f.id} value={f.id}>{f.first_name} {f.last_name}</MenuItem>)
                         }
                     </Select>
-                    <Button onClick={handleShare} disabled={sharingFriend == 0} className={`${classes.jobDetailButton} ${classes.shareButton}`}>
+                    <Button onClick={handleShare} disabled={sharingFriend === 0} className={`${classes.jobDetailButton} ${classes.shareButton}`}>
                         Share
                     </Button>
                 </Paper>

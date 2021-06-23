@@ -2,7 +2,6 @@
 // This includes the app name as well as the current date in mm/dd/yyyy format.
 
 import { makeStyles } from '@material-ui/core'
-import Typography from '@material-ui/core/Typography'
 import React from 'react'
 import Logo from '../../images/Logo.png'
 
