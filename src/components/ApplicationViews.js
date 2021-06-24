@@ -19,7 +19,7 @@ export const ApplicationViews = props => {
             <JobsProvider>
                 <PeopleProvider>
 
-                    <Header />
+                    <Header date={true}/>
 
                     <Route exact path="/">
                         <Today />
