@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => (
     }
 ))
 
-export const Header = props => {
+export const Header = ( props ) => {
     const classes = useStyles(props.theme)
 
     // Pretty date
@@ -46,7 +46,7 @@ export const Header = props => {
     return (
         <section className={classes.root}>
             <img className={classes.logo} src={Logo} alt="Verbose logo for Oil"/>
-            <p className={classes.date}>{niceDate}</p>
+            {!!props.date && <p className={classes.date}>{niceDate}</p>}
         </section>
     )
 }

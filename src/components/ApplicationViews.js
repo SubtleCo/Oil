@@ -9,7 +9,6 @@ import { Today } from './Jobs/Today'
 import { PeopleProvider } from './People/PeopleProvider'
 import { PeopleSearch } from './People/PeopleSearch'
 import { PeopleList } from './People/PeopleList'
-import { Register } from './auth/Register'
 import { Header } from './Header/Header'
 import { Footer } from './Footer/Footer'
 
@@ -19,7 +18,7 @@ export const ApplicationViews = props => {
             <JobsProvider>
                 <PeopleProvider>
 
-                    <Header />
+                    <Header date={true}/>
 
                     <Route exact path="/">
                         <Today />
@@ -44,11 +43,6 @@ export const ApplicationViews = props => {
                     <Route exact path="/people">
                         <PeopleSearch />
                         <PeopleList />
-                    </Route>
-
-                    {/*Edit Profile*/}
-                    <Route exact path="/profile">
-                        <Register />
                     </Route>
 
                     <Footer theme={props.theme} />
