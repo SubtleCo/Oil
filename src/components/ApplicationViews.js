@@ -46,7 +46,7 @@ export const ApplicationViews = props => {
                         <PeopleList />
                     </Route>
 
-                    {/*Edit Profile*/}
+                    {/* Edit Profile */}
                     <Route exact path="/profile">
                         <Register />
                     </Route>

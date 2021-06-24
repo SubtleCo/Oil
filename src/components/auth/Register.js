@@ -5,9 +5,65 @@ import { useHistory } from "react-router-dom"
 import { apiHeaders } from "../Settings"
 import { authApi, userIdStorageKey, userTokenStorageKey } from "./authSettings"
 import "./Login.css"
+import Modal from '@material-ui/core/Modal'
+import { makeStyles } from '@material-ui/core'
+import Paper from '@material-ui/core/Paper'
+import { Header } from '../Header/Header'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 
-export const Register = () => {
+const useStyles = makeStyles(theme => ({
+    root: {
+        backgroundColor: theme.palette.paper,
+        margin: 0,
+        padding: 0,
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        '& > *': {
+            margin: theme.spacing(1),
+            width: "80%"
+        }
+    },
+    secretPadding: {
+        height: "2vh",
+        background: theme.palette.secondary.main,
+        marginBottom: "2vh"
+    },
+    emailExistsModal: {
+        display: "flex",
+        position: 'absolute',
+        top: "40vh",
+        left: "20vw",
+        width: "40vw",
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
+    inputField: {
+        background: theme.palette.background.paper,
+    },
+    buttonContainer: {
+        display: "flex",
+        justifyContent: "space-between"
+    },
+    cancel: {
+        width: "40%",
+        background: theme.palette.secondary.main
+    },
+    submitButton: {
+        width: "40%",
+        background: theme.palette.success.light
+    },
+}))
 
+export const Register = props => {
+
+    const classes = useStyles(props.theme)
     const [registerUser, setRegisterUser] = useState({
         firstName: "",
         lastName: "",
@@ -16,7 +72,7 @@ export const Register = () => {
         username: ""
     })
     const [passwordConfirm, setPasswordConfirm] = useState("")
-    const [conflictDialog, setConflictDialog] = useState(false)
+    const [emailExistsModal, setEmailExistsModal] = useState(false)
     const loggedInUserId = parseInt(sessionStorage.getItem(userIdStorageKey))
     let text = {}
 
@@ -30,7 +86,7 @@ export const Register = () => {
             })
                 .then(res => res.json())
                 .then(user => {
-                    const thisUser = {...registerUser}
+                    const thisUser = { ...registerUser }
                     thisUser.firstName = user.first_name
                     thisUser.lastName = user.last_name
                     thisUser.username = user.username
@@ -117,7 +173,7 @@ export const Register = () => {
                     }
                 }
                 else {
-                    setConflictDialog(true)
+                    setEmailExistsModal(true)
                 }
             })
     }
@@ -125,7 +181,7 @@ export const Register = () => {
 
     // Set display text based on if this is a create or an edit session
     if (loggedInUserId) {
-        text.greeting = "Changed your mind about something?"
+        text.greeting = "Changed your mind?"
         text.detail = "No problem! You can change your name, email, and password."
         text.button = "Edit Account"
     } else {
@@ -134,45 +190,94 @@ export const Register = () => {
         text.button = "Create Account"
     }
     return (
-        <main style={{ textAlign: "center" }}>
+        <>
+            <Header date={false} />
+            <div className={classes.secretPadding} />
+            <main style={{ textAlign: "center" }}>
+                {/* Failed login dialog box */}
+                <Modal open={emailExistsModal}
+                    onClose={() => setEmailExistsModal(false)}>
+                    <Paper className={classes.emailExistsModal}>
+                        Account with that email address already exists
+                    </Paper>
+                </Modal>
 
-            <dialog className="dialog dialog--password" open={conflictDialog}>
-                <div>Account with that email address already exists</div>
-                <button className="button--close" onClick={e => setConflictDialog(false)}>Close</button>
-            </dialog>
-
-            <form className="form--login" onSubmit={handleRegister}>
-                <h1 className="h3 mb-3 font-weight-normal">{text.greeting}</h1>
-                <h4 className="h4 mb-3 font-weight-normal">{text.detail}</h4>
-                <fieldset>
-                    <label htmlFor="firstName"> First Name </label>
-                    <input type="text" name="firstName" id="firstName" className="form-control" placeholder="First name" required autoFocus value={registerUser.firstName} onChange={handleInputChange} />
-                </fieldset>
-                <fieldset>
-                    <label htmlFor="lastName"> Last Name </label>
-                    <input type="text" name="lastName" id="lastName" className="form-control" placeholder="Last name" required value={registerUser.lastName} onChange={handleInputChange} />
-                </fieldset>
-                <fieldset>
-                    <label htmlFor="username"> Username </label>
-                    <input type="text" name="username" id="username" className="form-control" placeholder="Username" required value={registerUser.username} onChange={handleInputChange} />
-                </fieldset>
-                <fieldset>
-                    <label htmlFor="inputEmail"> Email address </label>
-                    <input type="email" name="email" id="email" className="form-control" placeholder="Email address" required value={registerUser.email} onChange={handleInputChange} />
-                </fieldset>
-                <fieldset>
-                    <label htmlFor="password"> Password </label>
-                    <input type="password" name="password" id="password" className="form-control" placeholder="password" required value={registerUser.password} onChange={handleInputChange} />
-                </fieldset>
-                <fieldset>
-                    <label htmlFor="confirm"> Confirm Password </label>
-                    <input type="password" name="confirm" id="confirm" className="form-control" placeholder="confirm password" required onChange={e => setPasswordConfirm(e.target.value)} />
-                </fieldset>
-                <fieldset>
-                    <button type="submit"> {text.button} </button>
-                </fieldset>
-            </form>
-        </main>
+                <form className={classes.root} onSubmit={handleRegister}>
+                    <Typography variant="h4">{text.greeting}</Typography>
+                    <Typography variant="h6">{text.detail}</Typography>
+                    <TextField
+                        type="text"
+                        name="firstName"
+                        id="firstName"
+                        placeholder="First name"
+                        label="First Name"
+                        aria-label="First Name"
+                        variant="outlined"
+                        required
+                        autoFocus
+                        value={registerUser.firstName}
+                        onChange={handleInputChange} />
+                    <TextField
+                        type="text"
+                        name="lastName"
+                        id="lastName"
+                        placeholder="Last name"
+                        label="Last Name"
+                        aria-label="Last Name"
+                        variant="outlined"
+                        required
+                        value={registerUser.lastName}
+                        onChange={handleInputChange} />
+                    <TextField
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Username"
+                        label="Username"
+                        aria-label="Username"
+                        variant="outlined"
+                        required
+                        value={registerUser.username}
+                        onChange={handleInputChange} />
+                    <TextField
+                        type="email"
+                        name="email"
+                        id="email"
+                        placeholder="Email address"
+                        label="Email"
+                        aria-label="Email"
+                        variant="outlined"
+                        required
+                        value={registerUser.email}
+                        onChange={handleInputChange} />
+                    <TextField
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="password"
+                        label="Password"
+                        aria-label="Password"
+                        variant="outlined"
+                        required
+                        value={registerUser.password}
+                        onChange={handleInputChange} />
+                    <TextField
+                        type="password"
+                        name="confirm"
+                        id="confirm"
+                        placeholder="confirm password"
+                        label="Password, but again"
+                        aria-label="Password confirmation"
+                        variant="outlined"
+                        required
+                        onChange={e => setPasswordConfirm(e.target.value)} />
+                    <div className={classes.buttonContainer}>
+                        <Button className={classes.cancel} onClick={() => history.push("/")}> Never Mind </Button>
+                        <Button type="submit" className={classes.submitButton}> {text.button} </Button>
+                    </div>
+                </form>
+            </main>
+        </>
     )
 }
 
