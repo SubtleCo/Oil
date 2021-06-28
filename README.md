@@ -69,7 +69,7 @@ When did I change the air filter? Did I already water the fern this week? How lo
 - [Node.js and npm](https://nodejs.org/en/download/)
 - [Python](https://www.python.org)
 - [Pipenv](https://pypi.org/project/pipenv/)
-- A chromium-based browser. Might I recommend [Brave](https://brave.com)? ([Why not chrome?](https://chromeisbad.com))
+- Safari or a chromium-based browser. Might I recommend [Brave](https://brave.com)? ([Why not chrome?](https://chromeisbad.com))
 
 
 
