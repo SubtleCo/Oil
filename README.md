@@ -74,7 +74,7 @@ When did I change the air filter? Did I already water the fern this week? How lo
 
 
 ### Instructions for Use - Client
-1. Clone or fork this repository to your machine
+1. Fork / clone this repository to your machine
 2. change directories to `Oil/client/oil`
 3. run `npm install` to install dependencies
 4. run `npm start` to launch the react app
