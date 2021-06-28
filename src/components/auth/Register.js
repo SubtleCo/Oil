@@ -59,6 +59,17 @@ const useStyles = makeStyles(theme => ({
         width: "40%",
         background: theme.palette.success.light
     },
+    slowModal: {
+        display: "flex",
+        position: 'absolute',
+        top: "40vh",
+        left: "10vw",
+        width: "60vw",
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
 }))
 
 export const Register = props => {
@@ -73,6 +84,7 @@ export const Register = props => {
     })
     const [passwordConfirm, setPasswordConfirm] = useState("")
     const [emailExistsModal, setEmailExistsModal] = useState(false)
+    const [slowModal, setSlowModal] = useState(false)
     const loggedInUserId = parseInt(sessionStorage.getItem(userIdStorageKey))
     let text = {}
 
@@ -133,6 +145,7 @@ export const Register = props => {
     }
 
     const handleRegister = (e) => {
+        setSlowModal(true)
         e.preventDefault()
         // If the user is logged in, check to see the passwords match, then edit the user
         if (loggedInUserId) {
@@ -174,6 +187,7 @@ export const Register = props => {
                 }
                 else {
                     setEmailExistsModal(true)
+                    setSlowModal(false)
                 }
             })
     }
@@ -199,6 +213,14 @@ export const Register = props => {
                     onClose={() => setEmailExistsModal(false)}>
                     <Paper className={classes.emailExistsModal}>
                         Account with that email address already exists
+                    </Paper>
+                </Modal>
+                <Modal open={slowModal}
+                    onClose={() => setSlowModal(false)}>
+                    <Paper className={classes.slowModal}>
+                        <Typography variant="p">
+                            On it! Please note - Logging in & registering might be slow - the Oil api is hosted on a free Heroku server, which falls asleep after 30 minutes of inactivity. The first API call (such as logging in) will wake the server, and then the app will run smoothly after.
+                        </Typography>
                     </Paper>
                 </Modal>
 

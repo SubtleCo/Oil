@@ -45,6 +45,17 @@ const useStyles = makeStyles(theme => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
+    slowModal: {
+        display: "flex",
+        position: 'absolute',
+        top: "40vh",
+        left: "10vw",
+        width: "60vw",
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+    },
     inputField: {
         background: theme.palette.background.paper,
     },
@@ -60,11 +71,15 @@ const useStyles = makeStyles(theme => ({
         width: "40%",
         background: theme.palette.success.light
     },
+    slowNotice: {
+        fontSize: "12px"
+    },
 }))
 
 export const Login = props => {
     const [loginUser, setLoginUser] = useState({ username: "", password: "" })
     const [BadLoginModal, setBadLoginModal] = useState(false)
+    const [slowModal, setSlowModal] = useState(false)
     const classes = useStyles(props.theme)
     const history = useHistory()
 
@@ -80,6 +95,7 @@ export const Login = props => {
         // On successful login, the user's token and ID will be sent back
         // The token and ID will be set in session storage
         e.preventDefault()
+        setSlowModal(true)
         return fetch(`${authApi.localApiBaseUrl}/login`, {
             method: "POST",
             headers: {
@@ -97,6 +113,7 @@ export const Login = props => {
                     sessionStorage.setItem(userTokenStorageKey, user.token)
                     history.push("/")
                 } else {
+                    setSlowModal(false)
                     setBadLoginModal(true)
                 }
             })
@@ -106,51 +123,59 @@ export const Login = props => {
         <>
             <Header date={false} />
             <div className={classes.secretPadding} />
-                <form className={classes.root} onSubmit={handleLogin}>
-                    <Typography align="center" variant="h4">Please sign in</Typography>
-                    <TextField className={classes.inputField}
-                        type="username"
-                        id="username"
-                        placeholder="username"
-                        name="username"
-                        label="Username"
-                        aria-label="Username"
-                        variant="outlined"
-                        required autoFocus
-                        value={loginUser.username}
-                        onChange={handleInputChange} />
-                    <TextField className={classes.inputField}
-                        type="password"
-                        id="password"
-                        placeholder="password"
-                        name="password"
-                        label="Password"
-                        aria-label="Password"
-                        variant="outlined"
-                        required autoFocus
-                        value={loginUser.password}
-                        onChange={handleInputChange} />
-                    <div className={classes.buttonContainer}>
-                        <Button
-                            className={classes.registerButton}
-                            onClick={() => history.push("/register")}
-                            variant="outlined">
-                            Register
-                        </Button>
-                        <Button
-                            className={classes.submitButton}
-                            type="submit"
-                            variant="outlined">
-                            Sign in
-                        </Button>
-                    </div>
-                </form>
+            <form className={classes.root} onSubmit={handleLogin}>
+                <Typography align="center" variant="h4">Please sign in</Typography>
+                <TextField className={classes.inputField}
+                    type="username"
+                    id="username"
+                    placeholder="username"
+                    name="username"
+                    label="Username"
+                    aria-label="Username"
+                    variant="outlined"
+                    required autoFocus
+                    value={loginUser.username}
+                    onChange={handleInputChange} />
+                <TextField className={classes.inputField}
+                    type="password"
+                    id="password"
+                    placeholder="password"
+                    name="password"
+                    label="Password"
+                    aria-label="Password"
+                    variant="outlined"
+                    required autoFocus
+                    value={loginUser.password}
+                    onChange={handleInputChange} />
+                <div className={classes.buttonContainer}>
+                    <Button
+                        className={classes.registerButton}
+                        onClick={() => history.push("/register")}
+                        variant="outlined">
+                        Register
+                    </Button>
+                    <Button
+                        className={classes.submitButton}
+                        type="submit"
+                        variant="outlined">
+                        Sign in
+                    </Button>
+                </div>
+            </form>
             {/* Failed login dialog box */}
             <Modal open={BadLoginModal}
                 onClose={() => setBadLoginModal(false)}>
                 <Paper className={classes.badLoginModal}>
                     We can't find a username and password that match. Are you sure you're registered?
 
+                </Paper>
+            </Modal>
+            <Modal open={slowModal}
+                onClose={() => setSlowModal(false)}>
+                <Paper className={classes.slowModal}>
+                    <Typography variant="p">
+                        On it! Please note - Logging in might be slow - the Oil api is hosted on a free Heroku server, which falls asleep after 30 minutes of inactivity. The first API call (such as logging in) will wake the server, and then the app will run smoothly after.
+                    </Typography>
                 </Paper>
             </Modal>
         </>
